@@ -1,0 +1,40 @@
+{
+  "name": "makertap",
+  "version": "1.0.0",
+  "description": "Marketplace of adspace",
+  "author": "michael-alade <michaelkolafas15@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxtjs/auth": "^4.0.0-rc.3",
+    "@nuxtjs/axios": "^5.0.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "connect-route": "^0.1.5",
+    "crypto-js": "^3.1.9-1",
+    "dotenv": "^5.0.0",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^5.0.3",
+    "nuxt": "^1.0.0",
+    "quill": "^1.3.5",
+    "uikit": "^3.0.0-beta.39",
+    "vue-quill-editor": "^3.0.5"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6"
+  }
+}
