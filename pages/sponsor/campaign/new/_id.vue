@@ -4,6 +4,7 @@
             <div class="header">
                 <div>
                     <h3 class="title uk-text-center">{{ campaign.title }}</h3>
+                    <div class="subtitle uk-text-center">Please fill all the fields to get the most out of this campaign</div>
                 </div>
                 <span @click="$router.go(-1)" uk-icon="icon: arrow-left; ratio: 2"></span>
             </div>
@@ -42,42 +43,19 @@
                         <div class="subtitle">This would give more clarity about your product to writers</div>
                         <div class="uk-form-controls">
                             <div class="quill-editor" 
-                                :content="content"
+                                :content="form.productDescription"
                                 @change="onEditorChange($event)"
-                                @blur="onEditorBlur($event)"
-                                @focus="onEditorFocus($event)"
-                                @ready="onEditorReady($event)"
                                 v-quill:myQuillEditor="editorOption">
                             </div>
                         </div>
                     </div>
                     <div class="uk-margin">
                         <label class="uk-form-label">Select pricing</label>
-                        <div class="subtitle">The sponsored post would be shown for 7 days</div>
-                        <div class="uk-grid-small categories" uk-grid>
-                            <div class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
-                                <div class="category" uk-tooltip="title: Estimated reach: 10,000 - 20,000">
-                                    $500 - 5 publishers
-                                </div>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
-                                <div class="category" uk-tooltip="title: Estimated reach: 20,000 - 30,000">
-                                    $1000 - 10 publishers
-                                </div>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
-                                <div class="category" uk-tooltip="title: Estimated reach: 30,000 - 50,000">
-                                    $1500 - 15 publishers
-                                </div>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
-                                <div class="category" uk-tooltip="title: Estimated reach: 40,000 - 50,000;">
-                                    $2000 - 20 publishers
-                                </div>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
-                                <div class="category" uk-tooltip="title: Estimated reach: 50,000 - 150,000;">
-                                    $3000 - 30 publishers
+                        <div class="subtitle">A service fee of $10 is charged during payment</div>
+                        <div class="uk-grid-small categories uk-grid" uk-grid>
+                            <div v-for="price in pricing" :key="price.value.price" class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
+                                <div @click="selectPricing(price)" class="category" :class="{ 'selected': selectedPricing.value.price === price.value.price }" v-bind:uk-tooltip="`title: Estimated reach: ${price.value.reach}`">
+                                    {{ price.name }}
                                 </div>
                             </div>
                         </div>
@@ -95,7 +73,23 @@
                         </div>
                     </div>
                     <div class="uk-margin">
-                        <button type="submit" class="btn">Publish</button>
+                        <no-ssr>
+                        <vue-rave-pay
+                            class="btn"
+                            :disabled="paymentDisabled"
+                            :is-production="false"
+                            :text="raveBtnText"
+                            style-class="paymentbtn"
+                            :email="email"
+                            :amount="selectedPricing.value.price + 6"
+                            :reference="$route.params.id"
+                            :rave-key="raveKey"
+                            :callback="callback"
+                            :close="close"
+                            currency="USD"
+                        />
+                        </no-ssr>
+                        <!-- <button type="submit" class="btn">Publish</button> -->
                     </div>
                 </div>
             </div>
@@ -104,7 +98,11 @@
 </template>
 
 <script>
+import VueRavePay from 'vue-ravepayment'
 export default {
+  components: {
+    VueRavePay
+  },
   head () {
     return {
       title: `Edit | ${this.campaign.title}`
@@ -127,13 +125,25 @@ export default {
   },
   data () {
     return {
-      content: "<p><strong style=\"color: rgb(34, 34, 34);\">A headline for your release</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Discuss the larger mission of your product, i.e. what it does and what it is for. Include a date and location at the very beginning.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">What are the specifics of your product / announcement.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">A quote from your CEO or a business co-founder explaining the announcement. This means that journalists won’t have to waste their time – or your company’s time – finding quotes for the article.</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Bring in trends to explain why this product is relevant to the larger industry / community that your business is a part of. Ideally this will include at least one data point (ex: how large the industry is)</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Wrap up with a final quote from CEO or founder</strong></p><p>Your answer here</p>",
       selectedCategory: '',
+      raveBtnText: "Publish",
+      raveKey: "FLWPUBK-e6b3ce4d58052879aac69887be9d4ef0-X",
+      email: "foobar@example.com",
+      amount: 10000,
+      paymentDisabled: true,
+      selectedPricing: {
+        name: '',
+        value: {
+          price: 0,
+          reach: '',
+          slots: ''
+        }
+      },
       form: {
         productName: '',
         productTagline: '',
         productWebsite: '',
-        productDescription: '',
+        productDescription: "<p><strong style=\"color: rgb(34, 34, 34);\">A headline for your release</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Discuss the larger mission of your product, i.e. what it does and what it is for. Include a date and location at the very beginning.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">What are the specifics of your product / announcement.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">A quote from your CEO or a business co-founder explaining the announcement. This means that journalists won’t have to waste their time – or your company’s time – finding quotes for the article.</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Bring in trends to explain why this product is relevant to the larger industry / community that your business is a part of. Ideally this will include at least one data point (ex: how large the industry is)</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Wrap up with a final quote from CEO or founder</strong></p><p>Your answer here</p>",
         campaignCategory: '',
         campaignPricing: {},
         spots: 0,
@@ -171,31 +181,89 @@ export default {
         {
           name: 'Fashion'
         }
+      ],
+      pricing: [
+        {
+          name: '$0 - 5 publishers',
+          value: {
+            price: 0,
+            slots: 5,
+            reach: '10,000 - 20,000'
+          }
+        },
+        {
+          name: '$600 - 5 publishers',
+          value: {
+            price: 600,
+            slots: 5,
+            reach: '10,000 - 20,000'
+          }
+        },
+        {
+          name: '$1200 - 10 publishers',
+          value: {
+            price: 1200,
+            slots: 10,
+            reach: '20,000 - 30,000'
+          }
+        },
+        {
+          name: '$1800 - 15 publishers',
+          value: {
+            price: 1800,
+            slots: 15,
+            reach: '30,000 - 40,000'
+          }
+        },
+        {
+          name: '$2400 - 20 publishers',
+          value: {
+            price: 2400,
+            slots: 20,
+            reach: '40,000'
+          }
+        },
       ]
     }
   },
   methods: {
+    onPaymentSuccess (data) {
+      const token = this.$auth.token
+      this.$axios.setToken(token, 'Bearer', ['post'])
+      return this.$axios
+        .post(`/api/campaign/payment-verify/${this.$route.params.id}`, data)
+        .then(res => {
+          console.log(res, 'res')
+        })
+    },
+    callback (response) {
+      if (response.respcode === '00') {
+        const data = Object.assign({},
+          this.form, { transactions: [response] }
+        )
+        console.log(data, 'data')
+        return this.onPaymentSuccess(data)
+      }
+    },
+    close () {
+      console.log("Payment closed")
+    },
     selectCategory (name) {
       this.selectedCategory = name.toLowerCase()
       this.form.campaignCategory = name.toLowerCase()
     },
-    onEditorBlur(editor) {
-      console.log('editor blur!', editor)
-    },
-    onEditorFocus(editor) {
-      console.log('editor focus!', editor)
-    },
-    onEditorReady(editor) {
-      console.log('editor ready!', editor)
+    selectPricing (price) {
+      this.paymentDisabled = false
+      this.form.campaignPricing = price
+      this.form.slots = price.value.slots
+      this.selectedPricing = price
     },
     onEditorChange({ editor, html, text }) {
-      console.log('editor change!', editor, html, text)
-      this.content = html
+      this.form.productDescription = html
     }
   }
 }
 </script>
 
 <style>
-
 </style>

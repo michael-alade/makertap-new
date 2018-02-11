@@ -18,14 +18,19 @@ var campaignDetails = new Schema({
     type: String
   },
   campaignPricing: {
-    type: String
+    type: Object
   },
-  spots: {
+  slots: {
     type: Number,
     default: 0
   },
   assignedPublishers: {
-    type: Array
+    type: Array,
+    default: []
+  },
+  transactions: {
+    type: Array,
+    default: []
   }
 })
 

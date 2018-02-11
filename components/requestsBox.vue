@@ -3,16 +3,17 @@
         <div class="uk-child-width-expand@s" uk-grid>
             <div class="uk-width-1-3@m">
                 <div class="request-details">
-                    <div class="request-logo">
+                    <!-- <div class="request-logo">
                         <img src="https://s3.envato.com/files/240569513/onero_icon_sale.png" alt="">
-                    </div>
+                    </div> -->
                     <div class="title">
                         <h4>Mastercard</h4>
                         <div class="tagline">The best credit card provider</div>
+                        <!-- <div class="category">Technology</div> -->
                         <div class="uk-hidden@m desc-small">
                             <div class="time">
-                                <i class="fa fa-clock-o"></i>
-                                <span>7 days</span>
+                                <i class="fa fa-folder"></i>
+                                <span>Technology</span>
                             </div>
                             <div class="price-per-slot">
                                 <i class="fa fa-money"></i>
@@ -28,8 +29,8 @@
             </div>
             <div class="uk-width-1-3@m uk-visible@m description">
                 <div class="time">
-                    <i class="fa fa-clock-o"></i>
-                    <span>7 days</span>
+                    <i class="fa fa-folder"></i>
+                    <span>Technology</span>
                 </div>
                 <div class="price-per-slot">
                     <i class="fa fa-money"></i>

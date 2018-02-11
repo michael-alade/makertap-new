@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser')
 module.exports = {
   /*
   ** Headers of the page
@@ -18,14 +17,17 @@ module.exports = {
       { rel: 'stylesheet', type: 'text/css', media: 'screen', href: 'https://fonts.googleapis.com/css?family=Open+Sans|Lato|Roboto|Encode+Sans' },
       { rel: 'stylesheet', type: 'text/css', media: 'screen', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
     ],
+
     script: [
       { src: '/js/uikit.min.js' },
     ]
   },
-  serverMiddleware: [
-    { path: '/api', handler: '~/server/api.js' }
-  ],
+  // serverMiddleware: [
+  //   '~/server/socket',
+  //   { path: '/api', handler: '~/server/api.js' }
+  // ],
   plugins: [
+    { src: '~/plugins/socketio', ssr: false },
     { src: '~/plugins/uikit', ssr: false },
     { src: '~/plugins/quillEditor', ssr: false }
   ],
@@ -37,6 +39,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: ['vue-ravepayment', 'uikit'],
     /*
     ** Run ESLint on save
     */
@@ -78,6 +81,9 @@ module.exports = {
         expires: 10
       }
     }
+  },
+  env: {
+    WS_URL: 'http://localhost:3000/'
   },
   axios: {
     proxy: true,

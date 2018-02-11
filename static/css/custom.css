@@ -82,7 +82,7 @@ body {
 #hero {
     text-align: center;
     color: #1d1d1f;
-    padding: 163px 30px 130px 30px;
+    padding: 139px 30px 130px 30px;
 }
 
 #hero .inner-cta h2 {
@@ -481,8 +481,14 @@ body {
 
 #new-campaign .header .title {
     margin-top: 0;
+    margin-bottom: 0px;
     font-family: 'Lato', sans-serif;
     color: #6e6c6c;
+}
+
+#new-campaign .header .subtitle {
+    font-size: 13px;
+    margin-bottom: 11px;
 }
 
 #new-campaign .body {
@@ -783,10 +789,20 @@ body {
     font-size: 13px;
 }
 
+.requests-box .request-details .title .category {
+    width: 57px;
+    margin-top: 4px;
+    font-size: 11px;
+    border: 1px solid #cecece;
+    border-radius: 6px;
+    background: #eee;
+    padding: 4px 8px;
+}
+
 .desc-small {
     display: flex;
     font-size: 13px;
-    padding-top: 4px;
+    padding-top: 6px;
 }
 
 .desc-small div {

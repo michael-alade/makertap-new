@@ -56,7 +56,7 @@
                         </div>
                         </form>
                         <div class="uk-margin">
-                            <button class="btn btn-outline" style="margin: 0 auto;display: block;">
+                            <button @click="$router.push('/login')" class="btn btn-outline" style="margin: 0 auto;display: block;">
                                 Log in
                             </button>
                         </div>

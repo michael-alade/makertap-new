@@ -85,9 +85,41 @@ const getUserCampaigns = (req, res) => {
     })
 }
 
+const paymentSuccess = (req, res) => {
+  const campaignId = req.params.campaignId
+  const body = req.body
+  return campaignModel
+    .findById(campaignId)
+    .then(campaign => {
+      if (!campaign) {
+        return res.status(404).json({
+          message: 'Campaign not found'
+        })
+      }
+      campaign.status = 'paid'
+      campaign.campaignDetails = Object.assign({}, body)
+      return campaign.save().then(() => {
+        return res.status(200).json({
+          message: 'Payment success'
+        })
+      }).catch(err => {
+        return res.status(500).json({
+          err: err.message,
+          message: 'Server error'
+        })
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: 'Server error'
+      })
+    })
+}
+
 module.exports = {
   create,
   deleteCampaign,
   getCampaign,
+  paymentSuccess,
   getUserCampaigns
 }

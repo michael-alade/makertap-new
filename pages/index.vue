@@ -2,16 +2,16 @@
     <section>
         <section id="hero">
             <div class="inner-cta">
-                <h2>Sponsorships That Offer Value</h2>
+                <h2>Need Users For Your Startup?<br/> Try A PR Stunt.</h2>
                 <p class="tag">
-                  Offer and bid for sponsorships online. <br/>
-                  Fast and hassle free.
+                  Reach users through Influential Writers.<br/>
+                  Fast & hassle free.
                 </p>
                 <div class="ctas">
-                    <button onclick="location.href='#how-it-works';" class="btn btn-outline btn-large btn-multi" href="#how-it-works">
+                    <!-- <button onclick="location.href='#how-it-works';" class="btn btn-outline btn-large btn-multi" href="#how-it-works">
                       How it works
-                    </button>
-                    <button class="btn btn-large btn-multi" href="">
+                    </button> -->
+                    <button class="btn btn-large btn-multi" @click="$router.push('/signup')">
                       Get Started
                     </button>
                 </div>
@@ -23,7 +23,10 @@
 <script>
 export default {
   layout: 'main',
-  auth: false,
+  // auth: false,
+  head: {
+    title: 'Home | Makertap'
+  }
 }
 </script>
 

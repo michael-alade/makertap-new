@@ -3,20 +3,20 @@
                 <div class="uk-visible@m uk-width-1-5">
                     <div class="sidebar-left">
                         <div class="user-account">
-                            <img class="user-thumbnail loader" src="https://avatar.tobi.sh/211.svg?text=KO">
+                            <img class="user-thumbnail loader" :src="`https://avatar.tobi.sh/211.svg?text=${userShortName}`">
                             <div class="user-info">
-                                <div class="user-name">Kolawole Alade</div>
+                                <div class="user-name">{{ $auth.state.user.fullName }}</div>
                                 <div class="user-type">Publisher</div>
                             </div>
                         </div>
                         <div class="side-navigation">
                             <ul>
-                                <li>
+                                <!-- <li>
                                     <a href="#">
                                         <i class="fa fa-tachometer"></i>
                                         <span>Dashboard</span>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="./requests">
                                         <i class="fa fa-list"></i>
@@ -50,7 +50,7 @@
                         <div class="uk-container uk-container-large">
                             <div class="navigation">
                                 <div class="account uk-float-right">
-                                    <img class="user-thumbnail loader" src="https://avatar.tobi.sh/211.svg?text=KO">
+                                    <img class="user-thumbnail loader" :src="`https://avatar.tobi.sh/211.svg?text=${userShortName}`">
                                 </div>
                                 <div class="notifications uk-float-right">
                                     <div class="notify">
@@ -68,6 +68,20 @@
 
 <script>
 export default {
+  asyncData ({ app, redirect }) {
+    if (!app.$auth.hasScope('publisher')) {
+      return redirect(302, '/sponsor/campaign')
+    }
+  },
+  computed: {
+    userShortName () {
+      if (this.$auth.state.user) {
+        const fullName = this.$auth.state.user.fullName
+        const short = `${fullName[0]}${fullName[1]}`
+        return short.toUpperCase()
+      }
+    }
+  }
 }
 </script>
 
