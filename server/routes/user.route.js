@@ -21,4 +21,12 @@ module.exports = (router) => {
   router
     .route('/auth/user')
     .get(authMiddleware.secureAccess, userController.getUser)
+
+  router
+    .route('/auth/connect/twitter/:userId')
+    .post(authMiddleware.secureAccess, userController.connectTwitter)
+  
+  router
+    .route('/user/twitter/share')
+    .post(authMiddleware.secureAccess, userController.twitterShare)
 }

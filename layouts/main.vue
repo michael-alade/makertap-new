@@ -1,20 +1,20 @@
 <template>
-    <section> 
-        <div class="uk-offcanvas-content">
-                <div class="uk-navbar-container uk-navbar-transparent uk-sticky uk-sticky-fixed">
+    <section>
+            <!-- <no-ssr> -->
+                <div class="uk-navbar-container cs-navbar-container uk-sticky uk-sticky-fixed">
                     <div class="uk-container uk-container-expand">
                         <nav uk-navbar>
                             <div class="uk-navbar-left uk-hidden@s">
-                                <a class="uk-navbar-toggle" uk-toggle="target: #mobile-nav-menu; cls: uk-hidden;" uk-navbar-toggle-icon href="#"></a>
+                                <a class="uk-navbar-toggle" :uk-toggle="'target: #mobile-nav-menu; cls: uk-hidden;'" uk-navbar-toggle-icon href="#"></a>
                             </div>
                             <div class="uk-navbar-left uk-visible@s">
                                 <a href="/" class="uk-navbar-item uk-logo">
-                                    UNKNOWN
+                                    MAKERTAP
                                 </a>
                             </div>
                             <div class="uk-navbar-center uk-hidden@s">
                                 <a href="/" class="uk-navbar-item uk-logo">
-                                    UNKNOWN
+                                    MAKERTAP
                                 </a>
                             </div>
                             <div class="uk-navbar-center uk-visible@s">
@@ -38,20 +38,33 @@
                                     <a class="btn signup-cta" href="#">
                                         {{ $auth.state.user.fullName.split(' ')[0] }}
                                     </a>
-                                    <div uk-dropdown="mode: click">
+                                    <div uk-dropdown>
                                         <ul class="uk-nav uk-dropdown-nav user-avatar-dropdown">
-                                            <li v-if="$auth.state.user.userType === 'publisher'">
-                                                <a href="/publisher/dashboard">
-                                                    <span class="fa fa-tachometer"></span>
-                                                    <span class="text">Dashboard</span>
-                                                </a>
-                                            </li>
                                             <li v-if="$auth.state.user.userType === 'sponsor'">
                                                 <a href="/sponsor/campaign">
                                                     <span uk-icon="icon: bolt"></span>
                                                     <span class="text">Campaigns</span>
                                                 </a>
                                             </li>
+                                            <li v-if="$auth.state.user.userType === 'influencer'">
+                                                <a href="/requests">
+                                                    <span class="fa fa-list"></span>
+                                                    <span class="text">Requests</span>
+                                                </a>
+                                            </li>
+                                            <li v-if="$auth.state.user.userType === 'influencer'">
+                                                <a href="/payouts">
+                                                    <span class="fa fa-money"></span>
+                                                    <span class="text">Payouts</span>
+                                                </a>
+                                            </li>
+                                            <li v-if="$auth.state.user.userType === 'influencer' && $auth.state.user.twitterDetails === null">
+                                                <a href="/connect/twitter">
+                                                    <span uk-icon="icon: twitter"></span>
+                                                    <span class="text">Connect twitter</span>
+                                                </a>
+                                            </li>
+
                                             <li>
                                                 <a @click="$auth.logout()">
                                                     <span uk-icon="icon: sign-out"></span>
@@ -98,8 +111,8 @@
                         </ul>
                     </div>
                 </div>
-                <div style="height: 80px"></div>
-        </div>
+                <div class="uk-sticky-placeholder" style="height: 80px;"></div>
+            <!-- </no-ssr> -->
         <nuxt />
    </section>
 </template>

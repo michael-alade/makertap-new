@@ -9,8 +9,9 @@ var user = new Schema({
   userType: {
     type: String
   },
-  mediumUsername: {
-    type: String
+  twitterDetails: {
+    type: Object,
+    default: null
   },
   email: {
     type: String,
@@ -26,7 +27,7 @@ var user = new Schema({
     type: Boolean,
     default: false
   }
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 user.post('save', (doc) => {
   const payment = new paymentModel({ user: doc._id })

@@ -27,6 +27,10 @@ module.exports = (router) => {
       authMiddleware.sponsorOnly,
       campaignController.deleteCampaign
     )
+
+  router
+    .route('/campaign/r/:cleanUrl')
+    .get(campaignController.getCampaignWithShortUrl)
   
   router
     .route('/campaign/payment-verify/:campaignId')
@@ -35,5 +39,29 @@ module.exports = (router) => {
       authMiddleware.sponsorOnly,
       campaignMiddleware.paymentVerify,
       campaignController.paymentSuccess
+    )
+  
+  router
+    .route('/campaign/paid/requests')
+    .get(
+      authMiddleware.secureAccess,
+      authMiddleware.influencerOnly,
+      campaignController.getPaidCampaigns
+    )
+
+  router
+    .route('/campaign/accepted/requests')
+    .get(
+      authMiddleware.secureAccess,
+      authMiddleware.influencerOnly,
+      campaignController.acceptedRequests
+    )
+
+  router
+    .route('/campaign/upload-image/:campaignId')
+    .post(
+      authMiddleware.secureAccess,
+      authMiddleware.sponsorOnly,
+      campaignController.uploadImage
     )
 }

@@ -9,23 +9,58 @@
                 <span @click="$router.go(-1)" uk-icon="icon: arrow-left; ratio: 2"></span>
             </div>
             <div class="body">
+              <!-- <form> -->
                 <div class="form-box">
+                    <div class="uk-margin">
+                        <label class="uk-form-label">Product thumbnail</label>
+                        <div class="subtitle">Upload a cool product thumbnail</div>
+                        <div class="channel-picture-box">
+                            <input required type="file" hidden @change="setTempThumbnail" ref="uploadPicture">
+                            <div v-if="!loadingThumbnail" @click="getPicture" class="channel-picture uk-cover-container">
+                                <img v-if="!tempImgUrl" uk-cover src="/img/Placeholder.png"/>
+                                <img v-if="tempImgUrl" uk-cover :src="tempImgUrl"/>
+                                <div class="overlay">
+                                    <span>Upload</span>
+                                </div>
+                            </div>
+                            <div v-if="loadingThumbnail" @click="getPicture" class="channel-picture uk-cover-container">
+                                <div uk-spinner></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="uk-margin">
                         <label class="uk-form-label" for="product-name">Product name</label>
                         <div class="uk-form-controls">
-                            <input type="text" v-model="form.productName" class="uk-input" id="product-name" maxlength="20" placeholder='For example: Mastercard' />
+                            <input type="text" required v-model="form.productName" class="uk-input" id="product-name" maxlength="20" placeholder='For example: Mastercard' />
                         </div>
                     </div>
                     <div class="uk-margin">
                         <label class="uk-form-label" for="product-tagline">Product tagline</label>
                         <div class="uk-form-controls">
-                            <input type="text" v-model="form.productTagline" class="uk-input" id="product-tagline" maxlength="50" placeholder='e.g The best credit card provider' />
+                            <input type="text" required v-model="form.productTagline" class="uk-input" id="product-tagline" maxlength="50" placeholder='e.g The best credit card provider' />
                         </div>
                     </div>
                     <div class="uk-margin">
                         <label class="uk-form-label" for="product-website">Product website</label>
                         <div class="uk-form-controls">
-                            <input type="text" v-model="form.productWebsite" class="uk-input" id="product-website" maxlength="50" placeholder='https://example.com' />
+                            <input type="text" required v-model="form.productWebsite" class="uk-input" id="product-website" maxlength="50" placeholder='https://example.com' />
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label">Product Cover Photo</label>
+                        <div class="subtitle">Upload a cool product cover picture</div>
+                        <div class="channel-picture-box">
+                            <input required type="file" hidden @change="setTempCoverPhoto" ref="uploadCoverPicture">
+                            <div v-if="!loadingCoverPhoto" @click="getCoverPicture" style="width: 472px; height:314px" class="channel-picture uk-cover-container">
+                                <img v-if="!tempCoverPhotoImgUrl" uk-cover src="/img/Placeholder.png"/>
+                                <img v-if="tempCoverPhotoImgUrl" uk-cover :src="tempCoverPhotoImgUrl"/>
+                                <div class="overlay">
+                                    <span>Upload cover picture</span>
+                                </div>
+                            </div>
+                            <div v-if="loadingCoverPhoto" @click="getPicture" class="channel-picture uk-cover-container">
+                                <div uk-spinner></div>
+                            </div>
                         </div>
                     </div>
                     <div class="uk-margin">
@@ -42,56 +77,52 @@
                         <label class="uk-form-label" for="product-website">Product Description</label>
                         <div class="subtitle">This would give more clarity about your product to writers</div>
                         <div class="uk-form-controls">
-                            <div class="quill-editor" 
-                                :content="form.productDescription"
-                                @change="onEditorChange($event)"
-                                v-quill:myQuillEditor="editorOption">
-                            </div>
+                            <textarea v-model="form.productDescription" class="uk-textarea"></textarea>
                         </div>
                     </div>
                     <div class="uk-margin">
-                        <label class="uk-form-label">Select pricing</label>
-                        <div class="subtitle">A service fee of $10 is charged during payment</div>
-                        <div class="uk-grid-small categories uk-grid" uk-grid>
+                        <label class="uk-form-label">How many influencers do you need?</label>
+                        <div class="subtitle">A service fee of $15 is charged during payment</div>
+                        <range-slider
+                          class="slider"
+                          min="1"
+                          max="1000"
+                          step="10"
+                          v-model="sliderValue">
+                        </range-slider>
+                        <b>{{ sliderValue }} influencers</b>
+                        <!-- <div class="uk-grid-small categories uk-grid" uk-grid>
                             <div v-for="price in pricing" :key="price.value.price" class="uk-width-1-3@m uk-width-1-1 uk-width-1-2@s">
                                 <div @click="selectPricing(price)" class="category" :class="{ 'selected': selectedPricing.value.price === price.value.price }" v-bind:uk-tooltip="`title: Estimated reach: ${price.value.reach}`">
                                     {{ price.name }}
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="uk-margin">
-                        <label class="uk-form-label">Cover photo</label>
-                        <div class="subtitle">Upload a cool cover photo with 170 * 80 in size</div>
-                        <div class="uk-placeholder cover-photo">
-                            <span uk-icon="icon: cloud-upload"></span>
-                            <span class="uk-text-middle">Attach binaries by dropping them here or</span>
-                            <div uk-form-custom>
-                                <input type="file" multiple>
-                                <span class="uk-link">selecting one</span>
-                            </div>
-                        </div>
+                      
                     </div>
                     <div class="uk-margin">
                         <no-ssr>
-                        <vue-rave-pay
-                            class="btn"
-                            :disabled="paymentDisabled"
-                            :is-production="false"
-                            :text="raveBtnText"
-                            style-class="paymentbtn"
-                            :email="email"
-                            :amount="selectedPricing.value.price + 6"
-                            :reference="$route.params.id"
-                            :rave-key="raveKey"
-                            :callback="callback"
-                            :close="close"
-                            currency="USD"
-                        />
+                          <vue-rave-pay
+                              class="btn"
+                              type="submit"
+                              :is-production="false"
+                              :text="`$${sliderValue * 5} ${raveBtnText}`"
+                              style-class="paymentbtn"
+                              :email="email"
+                              :amount="(sliderValue * 5) + 15"
+                              :reference="$route.params.id"
+                              :rave-key="raveKey"
+                              :callback="callback"
+                              :close="close"
+                              currency="USD"
+                          />
                         </no-ssr>
                         <!-- <button type="submit" class="btn">Publish</button> -->
                     </div>
                 </div>
+                <!-- </form> -->
             </div>
         </div>
     </section>
@@ -99,9 +130,12 @@
 
 <script>
 import VueRavePay from 'vue-ravepayment'
+import RangeSlider from 'vue-range-slider'
+import 'vue-range-slider/dist/vue-range-slider.css'
 export default {
   components: {
-    VueRavePay
+    VueRavePay,
+    RangeSlider
   },
   head () {
     return {
@@ -117,6 +151,9 @@ export default {
     return app.$axios.get(`/api/campaign/${params.id}`)
      .then(res => {
        const { data } = res
+       if (data.campaign.status === 'paid') {
+         return redirect(302, `/sponsor/campaign/${data.campaign._id}`)
+       }
        return { campaign: data.campaign }
      })
      .catch(err => {
@@ -125,6 +162,11 @@ export default {
   },
   data () {
     return {
+      tempCoverPhotoImgUrl: null,
+      loadingCoverPhoto: null,
+      tempImgUrl: null,
+      loadingThumbnail: null,
+      sliderValue: 20,
       selectedCategory: '',
       raveBtnText: "Publish",
       raveKey: "FLWPUBK-e6b3ce4d58052879aac69887be9d4ef0-X",
@@ -142,10 +184,12 @@ export default {
       form: {
         productName: '',
         productTagline: '',
+        productThumbnail: '',
+        productCoverPhoto: '',
         productWebsite: '',
-        productDescription: "<p><strong style=\"color: rgb(34, 34, 34);\">A headline for your release</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Discuss the larger mission of your product, i.e. what it does and what it is for. Include a date and location at the very beginning.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">What are the specifics of your product / announcement.</strong></p><p>Your answer here...</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">A quote from your CEO or a business co-founder explaining the announcement. This means that journalists won’t have to waste their time – or your company’s time – finding quotes for the article.</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Bring in trends to explain why this product is relevant to the larger industry / community that your business is a part of. Ideally this will include at least one data point (ex: how large the industry is)</strong></p><p>Your answer here</p><p><br></p><p><strong style=\"color: rgb(34, 34, 34);\">Wrap up with a final quote from CEO or founder</strong></p><p>Your answer here</p>",
+        productDescription: '',
         campaignCategory: '',
-        campaignPricing: {},
+        campaignPrice: 0,
         spots: 0,
       },
       editorOption: {
@@ -181,59 +225,24 @@ export default {
         {
           name: 'Fashion'
         }
-      ],
-      pricing: [
-        {
-          name: '$0 - 5 publishers',
-          value: {
-            price: 0,
-            slots: 5,
-            reach: '10,000 - 20,000'
-          }
-        },
-        {
-          name: '$600 - 5 publishers',
-          value: {
-            price: 600,
-            slots: 5,
-            reach: '10,000 - 20,000'
-          }
-        },
-        {
-          name: '$1200 - 10 publishers',
-          value: {
-            price: 1200,
-            slots: 10,
-            reach: '20,000 - 30,000'
-          }
-        },
-        {
-          name: '$1800 - 15 publishers',
-          value: {
-            price: 1800,
-            slots: 15,
-            reach: '30,000 - 40,000'
-          }
-        },
-        {
-          name: '$2400 - 20 publishers',
-          value: {
-            price: 2400,
-            slots: 20,
-            reach: '40,000'
-          }
-        },
       ]
+    }
+  },
+  watch: {
+    sliderValue (val) {
+      this.form.spots = val
+      this.form.campaignPrice = val * 5
     }
   },
   methods: {
     onPaymentSuccess (data) {
+      const self = this
       const token = this.$auth.token
       this.$axios.setToken(token, 'Bearer', ['post'])
       return this.$axios
         .post(`/api/campaign/payment-verify/${this.$route.params.id}`, data)
         .then(res => {
-          console.log(res, 'res')
+          window.location.href = `/sponsor/campaign/${self.$route.params.id}`
         })
     },
     callback (response) {
@@ -241,7 +250,6 @@ export default {
         const data = Object.assign({},
           this.form, { transactions: [response] }
         )
-        console.log(data, 'data')
         return this.onPaymentSuccess(data)
       }
     },
@@ -258,12 +266,77 @@ export default {
       this.form.slots = price.value.slots
       this.selectedPricing = price
     },
-    onEditorChange({ editor, html, text }) {
-      this.form.productDescription = html
+    getPicture () {
+      this.$refs.uploadPicture.click()
+    },
+    getCoverPicture () {
+      this.$refs.uploadCoverPicture.click()
+    },
+    setTempThumbnail () {
+      const self = this
+      const reader = new window.FileReader()
+      const blob = this.$refs.uploadPicture.files[0]
+      // this.form.channelPicture = blob
+      if (blob) {
+        reader.onload = (e) => {
+          self.loadingThumbnail = true
+          return this.uploadImage(reader.result, {
+            width: 85,
+            height: 85,
+            crop: 'fill'
+          }, 'productThumbnail', this.$route.params.id)
+          .then(res => {
+            self.loadingThumbnail = false
+            self.tempImgUrl = res.url
+            self.form.productThumbnail = res.url
+          }).catch(err => {
+            self.tempImgUrl = null
+            self.loadingThumbnail = false
+          })
+        }
+        reader.readAsDataURL(blob)
+      }
+    },
+    setTempCoverPhoto () {
+      const self = this
+      const reader = new window.FileReader()
+      const blob = this.$refs.uploadCoverPicture.files[0]
+      if (blob) {
+        reader.onload = (e) => {
+          self.loadingCoverPhoto = true
+          return this.uploadImage(reader.result, {
+            width: 472,
+            height: 314,
+            crop: 'fit'
+          }, 'productThumbnail', this.$route.params.id)
+          .then(res => {
+            self.loadingCoverPhoto = false
+            self.tempCoverPhotoImgUrl = res.url
+            self.form.productCoverPhoto = res.url
+          }).catch(err => {
+            self.tempCoverPhotoImgUrl = null
+            self.loadingCoverPhoto = false
+          })
+        }
+        reader.readAsDataURL(blob)
+      }
+    },
+    async uploadImage (image, options, formField, campaignId) {
+      const token = this.$auth.token
+      this.$axios.setToken(token, 'Bearer', ['post'])
+      const { data } = await this.$axios.post(`/api/campaign/upload-image/${campaignId}`, {
+        image,
+        options,
+        formField
+      })
+      return { url: data.url }
     }
   }
 }
 </script>
 
 <style>
+  .slider {
+    width: 100%;
+  }
 </style>

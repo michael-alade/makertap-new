@@ -79,7 +79,7 @@ export default {
       this.$auth.login({
         data: form
       }).then(res => {
-        if (this.$auth.hasScope('publisher')) {
+        if (this.$auth.hasScope('influencer')) {
           self.$router.push('/publisher/dashboard/requests')
         } else if (this.$auth.hasScope('sponsor')) {
           self.$router.push('/sponsor/campaign')

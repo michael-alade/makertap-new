@@ -8,7 +8,7 @@
             <div class="campaigns">
                 <div class="uk-child-width-expand@s uk-grid-small uk-grid" uk-grid>
                     <div class="uk-width-1-4@m uk-width-1-2@s" v-for="campaign in campaigns" :key="campaign._id">
-                            <div @click="campaign.status === 'new' ? $router.push(`/sponsor/campaign/new/${campaign._id}`) : $router.push(`/sponsor/campaign/${campaign._id}`)" class="campaign-box uk-inline">
+                            <div @click="openCampaign(campaign)" class="campaign-box uk-inline">
                                 <div class="campaign-title">
                                     {{ campaign.title }}
                                 </div>
@@ -110,6 +110,9 @@ export default {
             self.getCampaigns()
           })
       }
+    },
+    openCampaign (campaign) {
+      campaign.status === 'new' ? window.location.href = `/sponsor/campaign/new/${campaign._id}` : window.location.href = `/sponsor/campaign/${campaign._id}`
     }
   }
 }

@@ -55,7 +55,7 @@ export default {
   middleware: ['auth'],
   head: {
     title: 'Payouts | Makertap'
-  },
+  }
 }
 </script>
 

@@ -31,7 +31,18 @@ const sponsorOnly = (req, res, next) => {
   return next()
 }
 
+const influencerOnly = (req, res, next) => {
+  const userType = req.decoded.userType
+  if (userType !== 'influencer') {
+    return res.status(401).json({
+      message: 'Not authorized'
+    })
+  }
+  return next()
+}
+
 module.exports = {
   secureAccess,
-  sponsorOnly
+  sponsorOnly,
+  influencerOnly
 }

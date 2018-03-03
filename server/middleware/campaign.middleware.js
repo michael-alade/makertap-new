@@ -17,9 +17,8 @@ const paymentVerify = (req, res, next) => {
   }
   return axios.post(process.env.RAVEPAY_URL, payload)
   .then(response => {
-    console.log(response, 'response')
     if (response.data.status === 'success') {
-      if (response.data.data.amount === body.campaignPricing.value.price + 6) {
+      if (response.data.data.amount === body.campaignPrice + 15) {
         if (response.data.data.tx_ref === req.params.campaignId) {
           return next()
         }

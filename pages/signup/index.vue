@@ -17,8 +17,8 @@
                                 </div>
                             </div>
                             <div class="uk-width-1-2">
-                                <div class="multi-select" :class="{ 'selected': selected === 'publisher' }" @click="select('publisher')">
-                                    Publisher
+                                <div class="multi-select" :class="{ 'selected': selected === 'influencer' }" @click="select('influencer')">
+                                    Twitter Influencer
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                 <input v-model="form.password" required class="uk-input" id="password" type="password">
                             </div>
                         </div>
-                        <div class="uk-margin" v-if="form.userType === 'publisher'">
+                        <div class="uk-margin" v-if="form.userType === 'influencer'">
                             <label class="uk-form-label" for="medium-username">Medium username</label>
                             <div class="uk-form-controls">
                                 <input v-model="form.mediumUsername" required class="uk-input" id="medium-username" type="text">

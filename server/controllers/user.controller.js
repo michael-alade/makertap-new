@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto-js')
+const Twitter = require('twitter')
 const dotenv = require('dotenv')
 const userModel = require('../models/user.model')
 dotenv.config()
@@ -151,11 +152,13 @@ const getUser = (req, res) => {
         })
       }
       let response = Object.assign({}, {
+        _id: user._id,
         fullName: user.fullName,
         email: user.email,
         userType: user.userType,
+
         scope: [user.userType],
-        mediumUsername: user.userType === 'publisher' ? user.mediumUsername : null,
+        twitterDetails: user.userType === 'influencer' ? user.twitterDetails || null : null,
         verified: user.verified
       })
       return res.status(200).json({
@@ -165,8 +168,76 @@ const getUser = (req, res) => {
     .catch(err => {
       return res.status(500).json({
         err: err.message,
-        message: 'Server error: User not found',
-        err: err.message
+        message: 'Server error: User not found'
+      })
+    })
+}
+
+const connectTwitter = (req, res) => {
+  const userId = req.params.userId
+  const twitterDetails = req.body
+  return userModel
+    .findById(userId)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        })
+      }
+      user.twitterDetails = twitterDetails
+      return user.save().then(() => {
+        return res.status(200).json({
+          message: 'Successfully linked accounts'
+        })
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        err: err.message,
+        message: 'Server error: User not found'
+      })
+    })
+}
+
+const twitterShare = (req, res) => {
+  const message = 'I just love this website'
+  const userId = req.decoded._id
+  const url = `${process.env.HOST}/r/${req.body.cleanUrl}`
+  let twitterOptions = {
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: '',
+    access_token_secret: ''
+  }
+  return userModel
+    .findById(userId)
+    .then(user => {
+      twitterOptions = Object.assign({}, twitterOptions, {
+        access_token_key: user.twitterDetails.accessToken,
+        access_token_secret: user.twitterDetails.secret
+      })
+      const client = new Twitter(twitterOptions)
+      return client.post('statuses/update', { status: `${message}
+      ${url}
+      ` })
+      .then(tweet => {
+        return res.status(200).json({
+          message: 'Tweet sent',
+          tweet
+        })
+      })
+      .catch(err => {
+        console.log(err, 'err')
+        return res.status(400).json({
+          message: 'Twitter error',
+          err: err
+        })
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        err: err.message,
+        message: 'Server error: User not found'
       })
     })
 }
@@ -175,6 +246,8 @@ module.exports = {
   signup,
   login,
   logout,
+  twitterShare,
   verifyEmail,
-  getUser
+  getUser,
+  connectTwitter
 }

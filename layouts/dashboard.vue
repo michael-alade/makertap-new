@@ -5,7 +5,7 @@
                         <div class="user-account">
                             <img class="user-thumbnail loader" :src="`https://avatar.tobi.sh/211.svg?text=${userShortName}`">
                             <div class="user-info">
-                                <div class="user-name">{{ $auth.state.user.fullName }}</div>
+                                <div class="user-name">{{ $auth.state.user.fullName.split(' ')[0] }}</div>
                                 <div class="user-type">Publisher</div>
                             </div>
                         </div>
@@ -51,6 +51,28 @@
                             <div class="navigation">
                                 <div class="account uk-float-right">
                                     <img class="user-thumbnail loader" :src="`https://avatar.tobi.sh/211.svg?text=${userShortName}`">
+                                    <div uk-dropdown="mode: click">
+                                        <ul class="uk-nav uk-dropdown-nav user-avatar-dropdown">
+                                            <li v-if="$auth.state.user.userType === 'publisher'">
+                                                <a href="/publisher/dashboard/requests">
+                                                    <span class="fa fa-tachometer"></span>
+                                                    <span class="text">Dashboard</span>
+                                                </a>
+                                            </li>
+                                            <li v-if="$auth.state.user.userType === 'sponsor'">
+                                                <a href="/sponsor/campaign">
+                                                    <span uk-icon="icon: bolt"></span>
+                                                    <span class="text">Campaigns</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a @click="$auth.logout()">
+                                                    <span uk-icon="icon: sign-out"></span>
+                                                    <span class="text">Logout</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div class="notifications uk-float-right">
                                     <div class="notify">
@@ -69,7 +91,7 @@
 <script>
 export default {
   asyncData ({ app, redirect }) {
-    if (!app.$auth.hasScope('publisher')) {
+    if (!app.$auth.hasScope('influencer')) {
       return redirect(302, '/sponsor/campaign')
     }
   },
