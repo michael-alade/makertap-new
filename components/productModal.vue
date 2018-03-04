@@ -82,7 +82,9 @@
                 <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-modal-footer uk-text-right">
                     <span style="margin-right: 10px;">{{140 - tweet.length}} left</span>
                     <a href="#product-modal" class="uk-button uk-button-default uk-modal-close" type="button" uk-toggle>Cancel</a>
-                    <button style="background:#00aced;" class="uk-button uk-button-primary">Tweet</button>
+                    <button :disabled="sending" style="background:#00aced;" @click="sendTweet" class="uk-button uk-button-primary">
+                        {{ !sending ? 'Tweet' : 'Sending' }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -94,8 +96,31 @@ export default {
   props: ['campaign'],
   data () {
     return {
-      tweet: ''
-    }   
+      tweet: '',
+      sending: false
+    }
+  },
+  methods: {
+    sendTweet () {
+      const data = {
+        message: this.tweet,
+        cleanUrl: this.$store.state.selectedProduct.cleanUrl
+      }
+      const token = this.$auth.token
+      this.$axios.setToken(token, 'Bearer', ['get'])
+      this.sending = true
+      return this.$axios.post('/api/user/twitter/share', data)
+        .then(res => {
+          this.sending = false
+          if (res.status === 200) {
+            return setTimeout(() => {
+              return window.UIkit.modal('#product-modal').show()
+            }, 3000)
+          }
+        }).catch(err => {
+          console.log(err, 'err')
+        })
+    }
   },
   computed: {
     campaignDetails () {

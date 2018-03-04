@@ -200,9 +200,10 @@ const connectTwitter = (req, res) => {
 }
 
 const twitterShare = (req, res) => {
-  const message = 'I just love this website'
+  const message = req.body.message
   const userId = req.decoded._id
-  const url = `${process.env.HOST}/r/${req.body.cleanUrl}`
+  const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://makertap.com'
+  const url = `${host}/r/${req.body.cleanUrl}`
   let twitterOptions = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -217,9 +218,7 @@ const twitterShare = (req, res) => {
         access_token_secret: user.twitterDetails.secret
       })
       const client = new Twitter(twitterOptions)
-      return client.post('statuses/update', { status: `${message}
-      ${url}
-      ` })
+      return client.post('statuses/update', { status: message + '\n' + url })
       .then(tweet => {
         return res.status(200).json({
           message: 'Tweet sent',

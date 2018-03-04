@@ -20,7 +20,7 @@ module.exports = {
 
     script: [
       { src: '/js/uikit.min.js' },
-      { type: 'text/javascript', src: 'https://js.taplytics.com/jssdk/d5a79ba37bd047b38b0dc3befa5732c6.min.js' },
+      // { type: 'text/javascript', src: 'https://js.taplytics.com/jssdk/d5a79ba37bd047b38b0dc3befa5732c6.min.js' },
     ]
   },
   // serverMiddleware: [
@@ -85,7 +85,8 @@ module.exports = {
     }
   },
   env: {
-    WS_URL: 'http://localhost:3000/'
+    WS_URL: 'http://localhost:3000/',
+    HOST: 'https://localhost:3000'
   },
   axios: {
     proxy: true,
