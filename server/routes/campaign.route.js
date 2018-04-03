@@ -45,7 +45,6 @@ module.exports = (router) => {
     .route('/campaign/paid/requests')
     .get(
       authMiddleware.secureAccess,
-      authMiddleware.influencerOnly,
       campaignController.getPaidCampaigns
     )
 

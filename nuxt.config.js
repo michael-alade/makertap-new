@@ -29,9 +29,9 @@ module.exports = {
   // ],
   plugins: [
     { src: '~/plugins/firebase', ssr: false },
+    { src: '~/plugins/numberAbbreviate' },
     { src: '~/plugins/socketio', ssr: false },
     { src: '~/plugins/uikit', ssr: false },
-    { src: '~/plugins/quillEditor', ssr: false }
   ],
   /*
   ** Customize the progress bar color
@@ -41,7 +41,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: ['vue-ravepayment', 'uikit'],
+    vendor: ['uikit'],
     /*
     ** Run ESLint on save
     */
@@ -85,13 +85,32 @@ module.exports = {
     }
   },
   env: {
-    WS_URL: 'http://localhost:3000/',
-    HOST: 'https://localhost:3000'
+    WS_URL: (function () {
+      if (process.env.NODE_ENV === 'development') {
+        return 'http://localhost:3000'
+      }
+      if (process.env.NODE_ENV === 'production') {
+        return 'http://localhost:3000'
+      }
+      if (process.env.NODE_ENV === 'staging') {
+        return 'https://makertap.now.sh'
+      }
+    })()
   },
   axios: {
     proxy: true,
   },
   proxy: {
-    '/api': 'http://localhost:3000'
+    '/api': (function () {
+      if (process.env.NODE_ENV === 'development') {
+        return 'http://localhost:3000'
+      }
+      if (process.env.NODE_ENV === 'production') {
+        return 'http://localhost:3000'
+      }
+      if (process.env.NODE_ENV === 'staging') {
+        return 'https://makertap.now.sh'
+      }
+    })()
   }
 }

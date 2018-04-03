@@ -4,6 +4,8 @@
             <img :src="details.productThumbnail || 'https://ph-files.imgix.net/6e4fe6f7-38d0-4050-bf3c-2cb8fcedaed5?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=80&h=80&fit=crop'"/>
         </div>
         <div class="startup-details">
+            <div class="status red" v-show="details && details.spots <= 0">Ended</div>
+            <div class="status blue" v-show="details && details.spots > 0">$5 per share</div>
             <div class="startup-name">
                 <span>{{ details.productName || 'loading...' }}</span>
             </div>

@@ -14,37 +14,11 @@
                         <li>
                             <a href="#">Analytics</a>
                         </li>
-                        <li>
-                            <a href="#">Assigned publishers</a>
-                        </li>
                     </ul>
                     <ul class="uk-switcher uk-margin">
                       <li>
-                        <line-chart :height="200" :width="400" :data="datacollection" :options="{responsive: true}"/>
-                      
-                        <div class="published-articles">
-                          <h4>Published Articles</h4>
-                          <div class="uk-child-width-expand@s uk-grid-small uk-grid" uk-grid>
-                            <div class="uk-width-1-1" v-for="i in articles" :key="i">
-                              <published-article />
-                            </div>
-                            <div class="uk-width-1-1" v-if="!articles.length">
-                              <div class="uk-text-center">
-                                No published articles yet.<br/>
-                                <span style="font-size: 13px">Publishers are still writing the articles.</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="assigned-publishers">
-                          <div class="uk-child-width-expand@s uk-grid-small uk-grid" uk-grid>
-                              <div class="uk-width-1-2@m" v-for="i in articles" :key="i">
-                                <publisher />
-                              </div>
-                          </div>
-                        </div>
+                        <campaign-analytics :campaign="campaign" />
+                        <tweets/>
                       </li>
                     </ul>
                 </div>
@@ -54,16 +28,12 @@
 </template>
 
 <script>
-import VueRavePay from 'vue-ravepayment'
-import LineChart from '~/components/lineChart.vue'
-import PublishedArticle from '~/components/publishedArticle.vue'
-import Publisher from '~/components/publisherProfileBox.vue'
+import Tweets from '~/components/tweets.vue'
+import CampaignAnalytics from '~/components/campaignAnalytics.vue'
 export default {
   components: {
-    VueRavePay,
-    LineChart,
-    PublishedArticle,
-    Publisher
+    Tweets,
+    CampaignAnalytics,
   },
   head () {
     return {

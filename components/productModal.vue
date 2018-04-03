@@ -49,24 +49,19 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="uk-modal-header">
-                    Hello
-                </div>
-                <div class="uk-modal-body">
-                    
-                </div>
-                <div class="uk-modal-footer uk-text-right">
-                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                    <a href="#modal-group-2" class="uk-button uk-button-primary" uk-toggle>Next</a>
-                </div> -->
             </div>
         </div>
-        <div id="tweet-product" uk-modal="bg-close: false">
+        <div v-if="user.twitterDetails !== null" id="tweet-product" uk-modal="bg-close: false">
             <div class="uk-modal-dialog">
+                <button class="uk-modal-close-outside" type="button" uk-close uk-toggle="target: #product-modal"></button>
                 <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-modal-header">
                     <h5>Tweet for a cup of coffee ☕</h5>
                 </div>
                 <div class="uk-modal-body">
+                    <div v-if="error.show" class="uk-alert-danger uk-alert" uk-alert>
+                        <a class="uk-alert-close" uk-close></a>
+                        <p>{{ error.message }}</p>
+                    </div>
                     <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-flex">
                         <div>
                             <img class="twitter-user" :src="user.twitterDetails.profile.profile_image_url"/>
@@ -97,14 +92,21 @@ export default {
   data () {
     return {
       tweet: '',
-      sending: false
+      sending: false,
+      error: {
+        message: '',
+        show: false
+      }
     }
   },
   methods: {
     sendTweet () {
+      const self = this
       const data = {
         message: this.tweet,
-        cleanUrl: this.$store.state.selectedProduct.cleanUrl
+        cleanUrl: this.$store.state.selectedProduct.cleanUrl,
+        product: this.product,
+        campaignId: this.$store.state.selectedProduct._id
       }
       const token = this.$auth.token
       this.$axios.setToken(token, 'Bearer', ['get'])
@@ -115,10 +117,18 @@ export default {
           if (res.status === 200) {
             return setTimeout(() => {
               return window.UIkit.modal('#product-modal').show()
-            }, 3000)
+            }, 2000)
           }
         }).catch(err => {
-          console.log(err, 'err')
+          self.sending = false
+          const message = err.response.data.message
+          self.error = {
+            show: true,
+            message
+          }
+          return setTimeout(() => {
+            return window.UIkit.modal('#product-modal').show()
+          }, 2000)
         })
     }
   },

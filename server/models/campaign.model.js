@@ -26,19 +26,30 @@ var campaignDetails = new Schema({
   campaignPrice: {
     type: Number
   },
-  slots: {
+  spots: {
     type: Number,
     default: 0
   },
-  publisherIds: {
+  influencerIds: {
     type: Array,
     default: []
   },
-  assignedPublishers: {
+  tweets: {
     type: Array,
     default: []
   },
   transactions: {
+    type: Array,
+    default: []
+  }
+})
+
+var analytics = new Schema({
+  totalClicks: {
+    type: Number,
+    default: 0
+  },
+  impressions: {
     type: Array,
     default: []
   }
@@ -54,6 +65,13 @@ var campaign = new Schema({
   },
   campaignDetails: {
     type: campaignDetails
+  },
+  analytics: {
+    type: analytics,
+    default: {
+      totalClicks: 0,
+      impressions: []
+    },
   },
   shortUrl: {
     type: String,

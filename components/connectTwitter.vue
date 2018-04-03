@@ -28,7 +28,12 @@ export default {
           self.saveTwitterDetails(twitterDetails)
         }
       }).catch(err => {
-        console.log(err, 'err')
+        return window.UIkit.notification({
+          message: err.message,
+          status: 'danger',
+          pos: 'top-right',
+          timeout: 5000
+        });
       })
     },
     saveTwitterDetails (twitterDetails) {
@@ -38,8 +43,7 @@ export default {
       this.$axios.setToken(token, 'Bearer')
       this.$axios.post(`/api/auth/connect/twitter/${userId}`, twitterDetails)
       .then(res => {
-        window.location.href = '/'
-        return
+        return self.$router.go(-1)
       })
       .catch(err => {
         // handle err

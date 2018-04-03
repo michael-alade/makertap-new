@@ -30,8 +30,11 @@ var user = new Schema({
 }, { timestamps: { createdAt: 'created_at' } })
 
 user.post('save', (doc) => {
-  const payment = new paymentModel({ user: doc._id })
-  return payment.save()
+  if (doc.userType === 'influencer') {
+    const payment = new paymentModel({ user: doc._id })
+    return payment.save()
+  }
+  return
 })
 
 module.exports = mongoose.model('User', user)

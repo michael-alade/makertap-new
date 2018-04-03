@@ -9,7 +9,6 @@
                 <span @click="$router.go(-1)" uk-icon="icon: arrow-left; ratio: 2"></span>
             </div>
             <div class="body">
-              <!-- <form> -->
                 <div class="form-box">
                     <div class="uk-margin">
                         <label class="uk-form-label">Product thumbnail</label>
@@ -100,36 +99,33 @@
                         </div> -->
                     </div>
                     <div class="uk-margin">
-                      
-                    </div>
-                    <div class="uk-margin">
                         <no-ssr>
-                          <vue-rave-pay
-                              class="btn"
-                              type="submit"
-                              :is-production="false"
-                              :text="`$${sliderValue * 5} ${raveBtnText}`"
-                              style-class="paymentbtn"
-                              :email="email"
-                              :amount="(sliderValue * 5) + 15"
-                              :reference="$route.params.id"
-                              :rave-key="raveKey"
-                              :callback="callback"
-                              :close="close"
-                              currency="USD"
-                          />
+                            <vue-rave-pay
+                                class="btn"
+                                type="submit"
+                                :form="form"
+                                :checkForm="checkForm"
+                                :is-production="false"
+                                :text="`$${sliderValue * 5} ${raveBtnText}`"
+                                style-class="paymentbtn"
+                                :email="email"
+                                :amount="(sliderValue * 5) + 15"
+                                :reference="$route.params.id"
+                                :rave-key="raveKey"
+                                :callback="callback"
+                                :close="close"
+                                currency="USD"
+                            />
                         </no-ssr>
-                        <!-- <button type="submit" class="btn">Publish</button> -->
                     </div>
                 </div>
-                <!-- </form> -->
             </div>
         </div>
     </section>
 </template>
 
 <script>
-import VueRavePay from 'vue-ravepayment'
+import VueRavePay from '~/components/rave.vue'
 import RangeSlider from 'vue-range-slider'
 import 'vue-range-slider/dist/vue-range-slider.css'
 export default {
@@ -162,6 +158,7 @@ export default {
   },
   data () {
     return {
+      allowPay: false,
       tempCoverPhotoImgUrl: null,
       loadingCoverPhoto: null,
       tempImgUrl: null,
@@ -235,6 +232,43 @@ export default {
     }
   },
   methods: {
+    checkForm (form) {
+      let errors = []
+      if (form.productName.length <= 0) {
+        errors.push('> You need to add a product name.')
+      }
+      if (form.productTagline.length <= 0) {
+        errors.push('> You need to add a product tagline.')
+      }
+      if (form.productThumbnail.length <= 0) {
+        errors.push('> You need to add a product thumbnail.')
+      }
+      if (form.productCoverPhoto.length <= 0) {
+        errors.push('> You need to add a product cover photo.')
+      }
+      if (form.productWebsite.length <= 0) {
+        errors.push('> You need to add a website for your product.')
+      }
+      if (form.productDescription.length <= 0) {
+        errors.push('> You need to add a product desctiption.')
+      }
+      if (form.campaignCategory.length <= 0) {
+        errors.push('> You need to select a product category.')
+      }
+      if (form.campaignPrice.length <= 0) {
+        errors.push('> You need to add a product tagline.')
+      }
+      if (errors.length) {
+        window.UIkit.notification({
+          message: errors.join('\n'),
+          status: 'warning',
+          pos: 'bottom-left',
+          timeout: 8000
+        })
+        return false;
+      }
+      return true
+    },
     onPaymentSuccess (data) {
       const self = this
       const token = this.$auth.token

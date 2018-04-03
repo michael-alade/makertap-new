@@ -3,6 +3,8 @@ const crypto = require('crypto-js')
 const Twitter = require('twitter')
 const dotenv = require('dotenv')
 const userModel = require('../models/user.model')
+const paymentModel = require('../models/payment.model')
+
 dotenv.config()
 
 const verifyPassword = (hashedPassword) => {
@@ -199,10 +201,21 @@ const connectTwitter = (req, res) => {
     })
 }
 
-const twitterShare = (req, res) => {
+const twitterShare = (req, res, next) => {
   const message = req.body.message
+  const product = req.body.product
   const userId = req.decoded._id
-  const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://makertap.com'
+  let host = ''
+  if (process.env.NODE_ENV === 'development') {
+    host = 'http://localhost:3000'
+  }
+  if (process.env.NODE_ENV === 'production') {
+    host = 'http://makertap.com'
+  }
+  if (process.env.NODE_ENV === 'staging') {
+    host = 'http://makertap.now.sh'
+  }
+  // const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://makertap.com'
   const url = `${host}/r/${req.body.cleanUrl}`
   let twitterOptions = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -218,20 +231,42 @@ const twitterShare = (req, res) => {
         access_token_secret: user.twitterDetails.secret
       })
       const client = new Twitter(twitterOptions)
-      return client.post('statuses/update', { status: message + '\n' + url })
-      .then(tweet => {
-        return res.status(200).json({
-          message: 'Tweet sent',
-          tweet
-        })
-      })
-      .catch(err => {
-        console.log(err, 'err')
+      if (user.twitterDetails.profile.follower_count < 60) {
         return res.status(400).json({
-          message: 'Twitter error',
-          err: err
+          message: 'You need to have a least 6000 followers'
         })
-      })
+      }
+      return client.post('statuses/update', { status: message + '\n' + url })
+        .then(tweet => {
+          return paymentModel.findOneAndUpdate({ user: userId }, {
+            $inc: {
+              totalAmountAvailable: 4
+            },
+            $push: {
+              transactions: {
+                amount: 4,
+                product: product,
+                date: Date.now()
+              }
+            }
+          })
+          .then(wallet => {
+            if (!wallet) {
+              return res.status(404).json({
+                message: 'Wallet was not found'
+              })
+            }
+            req.tweet = tweet
+            return next()
+          })
+        })
+        .catch(err => {
+          console.log(err, 'err')
+          return res.status(400).json({
+            message: 'Twitter error',
+            err: err
+          })
+        })
     })
     .catch(err => {
       return res.status(500).json({

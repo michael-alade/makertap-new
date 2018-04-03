@@ -9,7 +9,7 @@ const passport = require('./server/passport')
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const port = process.env.PORT || 3000
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'
 
 // We instantiate Nuxt.js with the options
 let config = require('./nuxt.config.js')

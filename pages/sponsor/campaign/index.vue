@@ -13,7 +13,7 @@
                                     {{ campaign.title }}
                                 </div>
                                 <div class="impressions">
-                                    <span>13.2K Impressions</span>
+                                    <span><span style="text-transform: uppercase">{{ $abbreviate(campaign.analytics.totalClicks, 2) }}</span> Impressions</span>
                                 </div>
                                 <div class="overlay uk-position-top-right">
                                     <div class="actions">

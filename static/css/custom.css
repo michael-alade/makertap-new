@@ -53,7 +53,6 @@ body {
 
 .mobile-nav li a {
     display: flex;
-    color: inherit;
 }
 
 .mobile-nav li a:hover {
@@ -854,23 +853,23 @@ body {
     background: #ebebeb94;
 }
 
-.mk-card {
+.mt-card {
     border-radius: 4px;
 }
 
-.mk-card .header {
+.mt-card .header {
     padding: 15px;
     border-bottom: 1px solid #eee;
 }
 
-.mk-card .header h4 {
+.mt-card .header h4 {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
     font-family: 'Lato', sans-serif;
 }
 
-.mk-card .body {
+.mt-card .body {
     padding: 15px;
 }
 
@@ -1202,8 +1201,44 @@ body {
 
 .startup-box .startup-details {
     flex: 1;
+    position: relative;
     padding-top: 5px !important;
     padding: 10px;
+}
+
+.startup-box .startup-details .status {
+    position: absolute;
+    right: 10px;
+    top: -10px;
+    color: #fff;
+    padding: 0px 10px;
+    font-size: 14px;
+    border-radius: 13px;
+}
+
+.yellow {
+    /* box-shadow: 0 5px 15px rgba(0,0,0,.08); */
+    background: #FFCE00;
+}
+
+.red {
+    background: #fc3434e0;
+}
+
+.black {
+    background: #262228;
+}
+
+.green {
+    background: #007849;
+}
+
+.blue {
+    background: #0375B4;
+}
+
+.purple {
+    background: #A239CA;
 }
 
 .startup-box .startup-details .startup-name {
@@ -1540,4 +1575,94 @@ body {
     border-radius: 50%;
     margin: 10px 0px 0px 10px;
     width: 36px;
+}
+
+#payouts {
+    margin-top: 10px;
+}
+
+.mk-card {
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.mk-card .today {
+    color: #fff;
+    display: block;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.mk-card .number {
+    color: #fff;
+    display: block;
+    font-size: 22px;
+}
+
+.mk-card .date {
+    color: #fff;
+    display: block;
+    margin-top: 13px;
+    font-size: 12px;
+}
+
+.mk-card .icon svg {
+    width: 83px;
+    height: 63px;
+    margin-top: 7px;
+}
+
+.mk-card.yellow {
+    /* box-shadow: 0 5px 15px rgba(0,0,0,.08); */
+    background: #FFCE00;
+}
+
+.mk-card.black {
+    background: #262228;
+}
+
+.mk-card.green {
+    background: #007849;
+}
+
+.mk-card.blue {
+    background: #0375B4;
+}
+
+.mk-card.purple {
+    background: #A239CA;
+}
+
+.tweets {
+    position: relative;
+    margin-top: 20px;
+}
+
+.tweets h4 {
+    margin-bottom: 0;
+}
+
+.tweets .tweets-loading {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    left: 0;
+    padding-top: 33px;
+    margin-top: 23px;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+}
+
+.tweets .tweets-loading span {
+    display: block;
+}
+
+.list-requests {
+    margin-top: 30px;
+}
+
+.uk-notification-message {
+    font-size: 20px;
 }

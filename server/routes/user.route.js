@@ -1,5 +1,6 @@
 const userController = require('../controllers/user.controller')
 const authMiddleware = require('../middleware/auth.middleware')
+const campaignMiddleware = require('../middleware/campaign.middleware')
 
 module.exports = (router) => {
   router
@@ -28,5 +29,9 @@ module.exports = (router) => {
   
   router
     .route('/user/twitter/share')
-    .post(authMiddleware.secureAccess, userController.twitterShare)
+    .post(
+      authMiddleware.secureAccess,
+      campaignMiddleware.checkIfUserHasTweetedCampaign,
+      userController.twitterShare,
+      campaignMiddleware.twitterShareDone)
 }

@@ -12,7 +12,6 @@
                     </div>
                 </div>
             </div>
-            <h4 class="request-time">Today</h4>
             <div class="list-requests">
                 <div class="uk-child-width-expand@s uk-grid-small uk-grid" uk-grid>
                   <div class="uk-width-1-3@m" v-for="product in campaigns" :key="product._id">
@@ -21,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <product-modal/>
+        <product-modal v-if="this.$auth.state.user.userType === 'influencer'"/>
     </section>
 </template>
 
@@ -34,7 +33,11 @@ export default {
     StartupBox,
     ProductModal
   },
-  async asyncData ({ app }) {
+  async asyncData ({ app, redirect }) {
+    if (app.$auth.state.user.userType === 'influencer' && 
+    app.$auth.state.user.twitterDetails === null) {
+      return redirect(302, '/connect/twitter')
+    }
     const token = app.$auth.token
     app.$axios.setToken(token, 'Bearer', ['get'])
     const { data } = await  app.$axios.get('/api/campaign/paid/requests')
@@ -46,8 +49,10 @@ export default {
   methods: {
     openLink(product) {
     //   this.$router.push(`/product/${i}`)
-      this.$store.dispatch('viewProduct', product)
-      window.UIkit.modal('#product-modal').show()
+      if (this.$auth.state.user.userType === 'influencer') {
+        this.$store.dispatch('viewProduct', product)
+        window.UIkit.modal('#product-modal').show()
+      }
     }
   },
 }

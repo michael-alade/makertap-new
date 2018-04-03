@@ -87,11 +87,21 @@ const getCampaignWithShortUrl = (req, res) => {
           message: 'Campaign not found'
         })
       }
-      return res.status(200).json({
-        campaign
+      campaign.analytics.totalClicks++
+      campaign.analytics.impressions.push({
+        type: 'click',
+        time: Date.now(),
+        referer: req.headers.referer,
+        userAgent: req.headers['user-agent']
+      })
+      return campaign.save().then(() => {
+        return res.status(200).json({
+          campaign
+        })
       })
     })
     .catch(err => {
+      console.log(err, 'err')
       return res.status(500).json({
         message: 'Server error'
       })
@@ -119,10 +129,7 @@ const getPaidCampaigns = (req, res) => {
   return campaignModel
     .find({
       status: 'paid',
-      // 'campaignDetails.slots': { $gt : 0 },
-      $nor: [{
-        'campaignDetails.publisherIds': { $in: [userId] }
-      }]
+      'campaignDetails.spots': { $gt : 0 },
     })
     .sort({ updatedAt: -1 })
     .then(campaigns => {
@@ -138,7 +145,7 @@ const getPaidCampaigns = (req, res) => {
     .catch(err => {
       console.log(err.message, 'error')
       return res.status(500).json({
-
+        err: err.message,
         message: 'Server error'
       })
     })

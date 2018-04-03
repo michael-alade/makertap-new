@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 
 var payment = new Schema({
   user: {
-    type: Object
+    type: String
   },
   transactions: {
     type: Array,
