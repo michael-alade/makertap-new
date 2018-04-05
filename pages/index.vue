@@ -9,7 +9,7 @@
                           Reach users through Influential Twitter accounts.<br/>
                           At the cost of a cup of coffee.
                         </p>
-                        <div class="ctas"> 
+                        <div class="ctas">
                             <button onclick="location.href='#how-it-works';" class="btn btn-outline btn-large btn-multi" href="#how-it-works">
                             How it works
                             </button>
@@ -93,6 +93,101 @@
                 </div>
             </div> -->
         </section>
+        <section id="features">
+            <div class="uk-container">
+                <div class="uk-grid uk-child-width-expand@s uk-grid-small feature-list" uk-grid>
+                    <div class="uk-width-1-3@m">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <i class="fa fa-th-list"></i>
+                            </div>
+                            <div class="feature-desc">
+                                <h4>Unlimited Campaigns</h4>
+                                <p>You can create and run multiple product campaigns at the same time.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-3@m">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <i class="fa fa-bell"></i>
+                            </div>
+                            <div class="feature-desc">
+                                <h4>Smart notifications</h4>
+                                <p>Get notified via email when an influencers tweets about your product.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-3@m">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <i class="fa fa-line-chart"></i>
+                            </div>
+                            <div class="feature-desc">
+                                <h4>analytics</h4>
+                                <p>Track the impressions gotten from all the tweets about your product on a nice, smart dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="how-it-works-steps">
+            <div class="uk-container">
+                <h4 class="uk-text-center">How it works</h4>
+                <div class="uk-grid uk-child-width-expand@s uk-grid-small steps" uk-grid>
+                    <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
+                        <div class="step-circle">
+                            <div class="step-inner-circle">
+                                <span>1</span>
+                            </div>
+                        </div>
+                        <div class="step-desc">
+                          <h5>Submit your business</h5>
+                          <p>Creating a campaign is simple. Complete the campaign form, select the number of influencers and campaign will be dispatched after payment is confirmed.</p>
+                        </div>
+                        <div class="step-bar-left">
+                        </div>
+                        <div class="step-bar-right">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
+                        <div class="step-circle">
+                            <div class="step-inner-circle">
+                                <span>2</span>
+                            </div>
+                        </div>
+                        <div class="step-desc">
+                          <h5>Dispatched to influencers</h5>
+                          <p>
+                              After the business is submitted, the campaign is dispatched to twitter influencers. They tweet about your business through their twitter accounts.
+                          </p>
+                        </div>
+                        <div class="step-bar-left">
+                        </div>
+                        <div class="step-bar-right">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
+                        <div class="step-circle">
+                            <div class="step-inner-circle">
+                                <span>3</span>
+                            </div>
+                        </div>
+                        <div class="step-desc">
+                          <h5>Track campaign impressions</h5>
+                          <p>
+                              Impressions from the tweets are tracked and displayed on the campaign dashboard. This also includes a visual list of all tweets about your business.
+                          </p>
+                        </div>
+                        <div class="step-bar-left">
+                        </div>
+                        <div class="step-bar-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="open-requests">
             <div class="uk-container">
                 <div class="uk-child-width-expand@s uk-grid-small" uk-grid>
@@ -114,7 +209,7 @@ export default {
   layout: 'main',
   // auth: false,
   head: {
-    title: 'Home | Makertap'
+    title: 'Makertap - Promote your product through influential twitter accounts.'
   },
   mounted () {
   },

@@ -41,6 +41,9 @@ var campaignDetails = new Schema({
   transactions: {
     type: Array,
     default: []
+  },
+  submittedDate: {
+    type: Date,
   }
 })
 

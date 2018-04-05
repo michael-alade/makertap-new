@@ -2,6 +2,10 @@ body {
     font-family: 'Roboto';
 }
 
+html {
+    font-family: Rubik, sans-serif;
+}
+
 .cs-navbar-container:not(.uk-navbar-transparent) {
     background: #fff;
     border-bottom: 1px solid #ededed;
@@ -283,7 +287,6 @@ body {
     font-size: 26px;
     font-family: 'Lato', sans-serif;
     line-height: 1.2em;
-    margin: 0 auto;
     font-size: 26px;
     line-height: 1.2em;
 }
@@ -303,7 +306,7 @@ body {
 
 @media only screen and (max-width: 425px) {
     #hero {
-        padding: 94px 30px 100px 30px;
+        padding: -1px 30px 100px 30px;
     }
     #hero .inner-cta h2 {
         font-size: 29px;
@@ -1665,4 +1668,119 @@ body {
 
 .uk-notification-message {
     font-size: 20px;
+}
+
+#how-it-works-steps {
+    padding: 30px 0 30px 0;
+    background: #f5f5f5;
+}
+
+.steps .step {
+    position: relative;
+}
+
+.steps .step .step-circle {
+    width: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border: 1px solid #666;
+    border-radius: 50%;
+}
+
+.steps .step .step-circle .step-inner-circle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(#2083fe,#187feb);
+    background: -webkit-linear-gradient(#2083fe#187feb);
+    background: -moz-linear-gradient(#2083fe,#187feb);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 29px;
+}
+
+.steps .step:first-child .step-bar-left, .steps .step:last-child .step-bar-right {
+    display: none;
+}
+
+.steps .step .step-bar-left {
+    left: 0;
+    right: 59%;
+}
+
+.steps .step .step-bar-right {
+    right: 0;
+    left: 62%;
+}
+
+/* @media (min-width: 768px) {
+    .steps .step .step-bar-left, .steps .step .step-bar-right {
+        display: none;
+    }
+} */
+
+@media (max-width: 959px) {
+    .steps .step .step-bar-left, .steps .step .step-bar-right {
+        display: none;
+    }
+}
+
+
+.steps .step .step-bar-left, .steps .step .step-bar-right {
+    height: 1px;
+    top: 32px;
+    position: absolute;
+    border-top: 1px solid #666;
+}
+
+.steps .step .step-desc {
+    margin-left: auto;
+    width: 285px;
+    text-align: center;
+    margin-right: auto;
+}
+
+.steps .step .step-desc h5 {
+    margin: 0;
+    margin-top: 10px;
+    font-size: 19px;
+}
+.steps .step .step-desc p {
+    margin: 0;
+    font-size: 14px;
+}
+
+#features {
+    padding: 60px 0 60px 0;
+}
+
+#features .feature-list .feature {
+    display: flex;
+}
+
+#features .feature-list .feature .feature-icon {
+    flex: 0 0 auto;
+}
+
+#features .feature-list .feature .feature-desc {
+    margin-left: 10px;
+    width: 300px;
+}
+
+#features .feature-list .feature .feature-desc h4 {
+    font-size: calc(.2027vw + 14.35135px);
+    margin-bottom: 10px;
+}
+
+#features .feature-list .feature .feature-desc p {
+    margin: 0;
+    color: #868e96;
 }

@@ -2,7 +2,7 @@
     <section>
             <!-- <no-ssr> -->
                 <div class="uk-navbar-container cs-navbar-container uk-sticky uk-sticky-fixed">
-                    <div class="uk-container uk-container-expand">
+                    <div class="uk-container">
                         <nav uk-navbar>
                             <div class="uk-navbar-left uk-hidden@s">
                                 <a class="uk-navbar-toggle" :uk-toggle="'target: #mobile-nav-menu; cls: uk-hidden;'" uk-navbar-toggle-icon href="#"></a>

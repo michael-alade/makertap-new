@@ -282,7 +282,7 @@ export default {
     callback (response) {
       if (response.respcode === '00') {
         const data = Object.assign({},
-          this.form, { transactions: [response] }
+          this.form, { transactions: [response], submittedDate: new Date() }
         )
         return this.onPaymentSuccess(data)
       }
