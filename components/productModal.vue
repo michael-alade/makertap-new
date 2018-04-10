@@ -54,7 +54,7 @@
         <div v-if="user.twitterDetails !== null" id="tweet-product" uk-modal="bg-close: false">
             <div class="uk-modal-dialog">
                 <button class="uk-modal-close-outside" type="button" uk-close uk-toggle="target: #product-modal"></button>
-                <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-modal-header">
+                <div v-if="user.twitterDetails.profile.followers_count >= 6000" class="uk-modal-header">
                     <h5>Tweet for a cup of coffee ☕</h5>
                 </div>
                 <div class="uk-modal-body">
@@ -62,7 +62,7 @@
                         <a class="uk-alert-close" uk-close></a>
                         <p>{{ error.message }}</p>
                     </div>
-                    <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-flex">
+                    <div v-if="user.twitterDetails.profile.followers_count >= 6000" class="uk-flex">
                         <div>
                             <img class="twitter-user" :src="user.twitterDetails.profile.profile_image_url"/>
                         </div>
@@ -70,11 +70,11 @@
                             <textarea placeholder="Write positive review about this product." v-model="tweet" maxlength="140" class="uk-textarea"></textarea>
                         </div>
                     </div>
-                    <div style="padding: 20px" v-if="user.twitterDetails.profile.followers_count < 60" class="uk-text-center">
+                    <div style="padding: 20px" v-if="user.twitterDetails.profile.followers_count < 6000" class="uk-text-center">
                         You need to have a follower count of at least 6000
                     </div>
                 </div>
-                <div v-if="user.twitterDetails.profile.followers_count >= 60" class="uk-modal-footer uk-text-right">
+                <div v-if="user.twitterDetails.profile.followers_count >= 6000" class="uk-modal-footer uk-text-right">
                     <span style="margin-right: 10px;">{{140 - tweet.length}} left</span>
                     <a href="#product-modal" class="uk-button uk-button-default uk-modal-close" type="button" uk-toggle>Cancel</a>
                     <button :disabled="sending" style="background:#00aced;" @click="sendTweet" class="uk-button uk-button-primary">

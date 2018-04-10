@@ -3,8 +3,8 @@
                 <div class="uk-container authentication">
                     <div class="card">
                         <div class="uk-margin" style="margin-bottom: 60px">
-                            <div style="margin: 0 auto; display:block; text-align:center;">
-                                UNKNOWN
+                            <div @click="$router.push('/')" style="cursor: pointer;font-size: 24px;font-family: 'Rubik', sans-serif; margin: 0 auto; display:block; text-align:center;">
+                                Makertap
                             </div>
                         </div>
                         <div class="">

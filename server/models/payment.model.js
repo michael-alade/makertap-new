@@ -9,6 +9,14 @@ var payment = new Schema({
     type: Array,
     default: []
   },
+  currency: {
+    type: String,
+    default: null
+  },
+  email: {
+    type: String,
+    default: null
+  },
   totalAmountAvailable: {
     type: Number,
     default: 0

@@ -10,7 +10,7 @@
                           At the cost of a cup of coffee.
                         </p>
                         <div class="ctas">
-                            <button onclick="location.href='#how-it-works';" class="btn btn-outline btn-large btn-multi" href="#how-it-works">
+                            <button @click="scrollToElement('#how-it-works-steps')" class="btn btn-outline btn-large btn-multi">
                             How it works
                             </button>
                             <button class="btn btn-large btn-multi" @click="$router.push('/signup')">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="uk-visible@m uk-width-1-2@m">
-                        <div class="request-examples">
+                        <div class="request-examples floating">
                             <div class="startup-box example-one request-example">
                                 <div class="startup-logo">
                                     <img src="https://ph-files.imgix.net/dea3b513-f0ac-48e2-ab6b-d7e3e6535894?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=80&h=80&fit=crop"/>
@@ -99,7 +99,7 @@
                     <div class="uk-width-1-3@m">
                         <div class="feature">
                             <div class="feature-icon">
-                                <i class="fa fa-th-list"></i>
+                                <i class="fa fa-th-list text-blue"></i>
                             </div>
                             <div class="feature-desc">
                                 <h4>Unlimited Campaigns</h4>
@@ -110,7 +110,7 @@
                     <div class="uk-width-1-3@m">
                         <div class="feature">
                             <div class="feature-icon">
-                                <i class="fa fa-bell"></i>
+                                <i class="fa fa-bell text-red"></i>
                             </div>
                             <div class="feature-desc">
                                 <h4>Smart notifications</h4>
@@ -121,11 +121,11 @@
                     <div class="uk-width-1-3@m">
                         <div class="feature">
                             <div class="feature-icon">
-                                <i class="fa fa-line-chart"></i>
+                                <i class="fa fa-line-chart text-green"></i>
                             </div>
                             <div class="feature-desc">
-                                <h4>analytics</h4>
-                                <p>Track the impressions gotten from all the tweets about your product on a nice, smart dashboard.</p>
+                                <h4>Analytics</h4>
+                                <p>Track the impressions related to your campaign on a nice, smart dashboard.</p>
                             </div>
                         </div>
                     </div>
@@ -137,14 +137,14 @@
                 <h4 class="uk-text-center">How it works</h4>
                 <div class="uk-grid uk-child-width-expand@s uk-grid-small steps" uk-grid>
                     <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
-                        <div class="step-circle">
-                            <div class="step-inner-circle">
+                        <div class="step-circle border-red">
+                            <div class="step-inner-circle bg-red">
                                 <span>1</span>
                             </div>
                         </div>
                         <div class="step-desc">
                           <h5>Submit your business</h5>
-                          <p>Creating a campaign is simple. Complete the campaign form, select the number of influencers and campaign will be dispatched after payment is confirmed.</p>
+                          <p>Creating a campaign is simple. Complete the campaign form, select the number of influencers and the campaign will be dispatched after payment is confirmed.</p>
                         </div>
                         <div class="step-bar-left">
                         </div>
@@ -152,8 +152,8 @@
                         </div>
                     </div>
                     <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
-                        <div class="step-circle">
-                            <div class="step-inner-circle">
+                        <div class="step-circle border-blue">
+                            <div class="step-inner-circle bg-blue">
                                 <span>2</span>
                             </div>
                         </div>
@@ -169,8 +169,8 @@
                         </div>
                     </div>
                     <div class="uk-width-1-3@m uk-width-1-3@s step uk-text-center">
-                        <div class="step-circle">
-                            <div class="step-inner-circle">
+                        <div class="step-circle border-green">
+                            <div class="step-inner-circle bg-green">
                                 <span>3</span>
                             </div>
                         </div>
@@ -188,16 +188,20 @@
                 </div>
             </div>
         </section>
-        <section class="open-requests">
+        <section id="get-started-section">
             <div class="uk-container">
-                <div class="uk-child-width-expand@s uk-grid-small" uk-grid>
-                  <div class="uk-width-1-3@m" v-for="i in [2,5,6,3,4,7]" :key="i">
-                    <div @click="openLink(i)"><startup-box /></div>
-                  </div>
-                </div>
+                <div><h2>Expand your reach</h2></div>
+                <div><button class="btn" @click="$router.push('/signup')">Get Started</button></div>
             </div>
         </section>
-        <!-- <product-modal/> -->
+        <footer>
+            <div class="uk-container">
+                <a class="home footer-link">Makertap © {{ year }}</a>
+                <a class="footer-link" href="/terms">Terms of Service</a>
+                <a class="footer-link" target="_blank" href="https://twitter.com/alademk">Twitter</a>
+                <a class="footer-link" target="_blank" href="https://t.me/alademk">Telegram</a>
+            </div>
+        </footer>
     </section>
 </template>
 
@@ -211,12 +215,20 @@ export default {
   head: {
     title: 'Makertap - Promote your product through influential twitter accounts.'
   },
+  data () {
+    return {
+      year: new Date().getFullYear()
+    }
+  },
   mounted () {
+
   },
   methods: {
     openLink(i) {
-    //   this.$router.push(`/product/${i}`)
       window.UIkit.modal('#product-modal').show()
+    },
+    scrollToElement (el) {
+      window.UIkit.scroll(el).scrollTo(el)
     }
   },
   components: {

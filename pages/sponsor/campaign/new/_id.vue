@@ -81,10 +81,10 @@
                     </div>
                     <div class="uk-margin">
                         <label class="uk-form-label">How many influencers do you need?</label>
-                        <div class="subtitle">A service fee of $15 is charged during payment</div>
+                        <div class="subtitle">A service fee of $8 is charged during payment</div>
                         <range-slider
                           class="slider"
-                          min="1"
+                          min="10"
                           max="1000"
                           step="10"
                           v-model="sliderValue">
@@ -109,7 +109,7 @@
                                 :text="`$${sliderValue * 5} ${raveBtnText}`"
                                 style-class="paymentbtn"
                                 :email="email"
-                                :amount="(sliderValue * 5) + 15"
+                                :amount="(sliderValue * 5) + 8"
                                 :reference="$route.params.id"
                                 :rave-key="raveKey"
                                 :callback="callback"
@@ -186,16 +186,8 @@ export default {
         productWebsite: '',
         productDescription: '',
         campaignCategory: '',
-        campaignPrice: 0,
+        campaignPrice: 20 * 5,
         spots: 0,
-      },
-      editorOption: {
-        modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block']
-          ]
-        }
       },
       categories: [
         {
@@ -273,10 +265,24 @@ export default {
       const self = this
       const token = this.$auth.token
       this.$axios.setToken(token, 'Bearer', ['post'])
+      window.UIkit.notification({
+          message: 'Please hold on we are verifying your payment.',
+          status: 'success',
+          pos: 'bottom-left',
+          timeout: 8000
+      })
       return this.$axios
         .post(`/api/campaign/payment-verify/${this.$route.params.id}`, data)
         .then(res => {
-          window.location.href = `/sponsor/campaign/${self.$route.params.id}`
+          window.location.replace = `/sponsor/campaign/${self.$route.params.id}`
+        })
+        .catch(err => {
+          window.UIkit.notification({
+            message: 'Your payment failed.',
+            status: 'danger',
+            pos: 'bottom-left',
+            timeout: 8000
+          })
         })
     },
     callback (response) {
@@ -286,6 +292,12 @@ export default {
         )
         return this.onPaymentSuccess(data)
       }
+      window.UIkit.notification({
+        message: 'Your payment failed.',
+        status: 'danger',
+        pos: 'bottom-left',
+        timeout: 8000
+      })
     },
     close () {
       console.log("Payment closed")

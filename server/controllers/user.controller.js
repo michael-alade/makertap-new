@@ -31,6 +31,15 @@ const signup = (req, res) => {
         return userModel
           .create(body)
           .then(user => {
+            if (body.userType === 'influencer') {
+              const payment = new paymentModel({ user: user._id, email: body.email })
+              return payment.save().then(() => {
+                return res.status(201).json({
+                  status: 201,
+                  message: 'Successfully registered'
+                })
+              })
+            }
             // const nameArr = body.fullName.split(' ')
             // if (nameArr.length >= 2) {
             //   req.io.emit('snackbar', {
@@ -179,18 +188,19 @@ const connectTwitter = (req, res) => {
   const userId = req.params.userId
   const twitterDetails = req.body
   return userModel
-    .findById(userId)
+    .findByIdAndUpdate(userId, {
+      $set: {
+        twitterDetails
+      }
+    })
     .then(user => {
       if (!user) {
         return res.status(404).json({
           message: 'User not found'
         })
       }
-      user.twitterDetails = twitterDetails
-      return user.save().then(() => {
-        return res.status(200).json({
-          message: 'Successfully linked accounts'
-        })
+      return res.status(200).json({
+        message: 'Successfully linked accounts'
       })
     })
     .catch(err => {

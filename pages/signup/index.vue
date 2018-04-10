@@ -3,8 +3,8 @@
                 <div class="uk-container authentication">
                     <div v-if="!emailVerification" class="card">
                         <div class="uk-margin" style="margin-bottom: 60px">
-                            <div style="margin: 0 auto; display:block; text-align:center;">
-                                UNKNOWN
+                            <div @click="$router.push('/')" style="cursor: pointer;font-size: 24px;font-family: 'Rubik', sans-serif; margin: 0 auto; display:block; text-align:center;">
+                                Makertap
                             </div>
                         </div>
                         <status-component v-if="status.show" :status="status" />
@@ -40,14 +40,8 @@
                                 <input v-model="form.password" required class="uk-input" id="password" type="password">
                             </div>
                         </div>
-                        <div class="uk-margin" v-if="form.userType === 'influencer'">
-                            <label class="uk-form-label" for="medium-username">Medium username</label>
-                            <div class="uk-form-controls">
-                                <input v-model="form.mediumUsername" required class="uk-input" id="medium-username" type="text">
-                            </div>
-                        </div>
                         <div class="uk-margin">
-                            <span class="terms">By clicking signup, you've read & agreed to the <a href="#">terms</a></span>
+                            <span class="terms">By clicking signup, you've read & agreed to the <a href="/terms">terms</a></span>
                         </div>
                         <div class="uk-margin">
                             <button type="submit" class="btn btn-large btn-long">
@@ -91,7 +85,6 @@ export default {
         fullName: '',
         email: '',
         userType: null,
-        mediumUsername: '',
         password: ''
       }
     }

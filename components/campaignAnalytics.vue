@@ -7,9 +7,9 @@
                         <div>
                             <span class="number">{{ $abbreviate(todayImpressions, 2) }}</span>
                             <span class="date">{{ getDate(new Date()).month }} {{ getDate(new Date()).day }}</span>
-                            <span class="today">Today's Impression</span>
+                            <span class="today">Today's Impressions</span>
                         </div>
-                        <div class="uk-margin-left">
+                        <div style="margin-left: 14px">
                             <div class="icon">
                                 <svg>
                                     <use xlink:href="/img/calendar.svg#calendar"></use>

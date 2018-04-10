@@ -24,6 +24,35 @@ const getUserWallet = (req, res) => {
     })
 }
 
+const updatePaymentDetails = (req, res) => {
+  const userId = req.decoded._id
+  const body = req.body
+  return paymentModel
+    .findOneAndUpdate({ user: userId }, {
+      $set: {
+        email: body.email,
+        currency: body.currency
+      }
+    })
+    .then(wallet => {
+      if (wallet) {
+        return res.status(200).json({
+          message: 'Successfully updated.'
+        })
+      }
+      return res.status(500).json({
+        message: 'Server error: Not found',
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: 'Server error',
+        err: err.message
+      })
+    })
+}
+
 module.exports = {
-  getUserWallet
+  getUserWallet,
+  updatePaymentDetails
 }
