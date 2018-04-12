@@ -173,7 +173,7 @@ export default {
   methods: {
     updateSettings () {
       const token = this.$auth.token
-      this.$axios.setToken(token, 'Bearer', ['get'])
+      this.$axios.setToken(token, 'Bearer')
       this.updating = true
       return this.$axios
         .put('/api/user/wallet/update', {

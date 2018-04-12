@@ -38,13 +38,13 @@ module.exports = (router) => {
       authMiddleware.secureAccess,
       authMiddleware.sponsorOnly,
       campaignMiddleware.paymentVerify,
-      campaignController.paymentSuccess
+      campaignController.paymentSuccess,
+      campaignController.broadcastEmailToAllInfluencers
     )
   
   router
     .route('/campaign/paid/requests')
     .get(
-      authMiddleware.secureAccess,
       campaignController.getPaidCampaigns
     )
 

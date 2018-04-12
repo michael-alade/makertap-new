@@ -187,7 +187,7 @@ export default {
         productDescription: '',
         campaignCategory: '',
         campaignPrice: 20 * 5,
-        spots: 0,
+        spots: 20,
       },
       categories: [
         {
@@ -274,15 +274,18 @@ export default {
       return this.$axios
         .post(`/api/campaign/payment-verify/${this.$route.params.id}`, data)
         .then(res => {
-          window.location.replace = `/sponsor/campaign/${self.$route.params.id}`
+          window.location.replace(`/sponsor/campaign/${self.$route.params.id}`)
+          return;
         })
         .catch(err => {
-          window.UIkit.notification({
-            message: 'Your payment failed.',
-            status: 'danger',
-            pos: 'bottom-left',
-            timeout: 8000
-          })
+          if (err) {
+            return window.UIkit.notification({
+              message: 'Your payment failed.',
+              status: 'danger',
+              pos: 'bottom-left',
+              timeout: 8000
+            })
+          }
         })
     },
     callback (response) {
@@ -292,8 +295,8 @@ export default {
         )
         return this.onPaymentSuccess(data)
       }
-      window.UIkit.notification({
-        message: 'Your payment failed.',
+      return window.UIkit.notification({
+        message: 'Your payment failedS.',
         status: 'danger',
         pos: 'bottom-left',
         timeout: 8000

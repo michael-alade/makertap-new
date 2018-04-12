@@ -20,6 +20,15 @@
                         <campaign-analytics :campaign="campaign" />
                         <tweets :tweets="campaign.campaignDetails.tweets"/>
                       </li>
+                      <!-- <li>
+                        <h5>Notifications</h5>
+                        <div class="uk-margin">
+                          <label><input class="uk-checkbox" type="checkbox"> Receive email notification when a new tweet is posted.</label>
+                        </div>
+                        <div class="uk-margin">
+                          <button @click="updateCampaignSettings" class="btn">Save</button>
+                        </div>
+                      </li> -->
                     </ul>
                 </div>
             </div>
@@ -58,6 +67,30 @@ export default {
         return redirect(302, '/sponsor/campaign')
      })
   },
+  methods: {
+    updateCampaignSettings () {
+      const token = this.$auth.token
+      this.$axios.setToken(token, 'Bearer', ['post'])
+      return this.$axios
+        .put(`/api/campaign/setting/update/${this.route.params.id}`, campaign.settings)
+        .then(res => {
+          return window.UIkit.notification({
+            message: 'Campaign settings update.',
+            status: 'success',
+            pos: 'bottom-left',
+            timeout: 8000
+          })
+        })
+        .catch(err => {
+          return window.UIkit.notification({
+            message: 'An error occured, Settings not updated.',
+            status: 'danger',
+            pos: 'bottom-left',
+            timeout: 8000
+          })
+        })
+    }
+  }
 }
 </script>
 

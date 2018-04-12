@@ -19,7 +19,7 @@
                         <div class="twitter-share">
                             <span class="numbers">70</span>
                             <div style="display: flex; align-items:center; justify-content: center">
-                                <span uk-toggle="target: #tweet-product" class="twitter" uk-tooltip="title: 20 spots left">
+                                <span uk-toggle="target: #tweet-product" class="twitter" :uk-tooltip="`title: ${product.spots} spots left`">
                                     <i class="fa fa-twitter"></i>
                                 </span>
                             </div>

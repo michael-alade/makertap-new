@@ -1,5 +1,8 @@
 const cloudinary = require('cloudinary')
 const campaignModel = require('../models/campaign.model')
+const userModel = require('../models/user.model')
+const custom = require('../custom')
+
 cloudinary.config({
   cloud_name: 'makertap',
   api_key: '692474461884365',
@@ -112,6 +115,7 @@ const getUserCampaigns = (req, res) => {
   const userId = req.decoded._id
   return campaignModel
     .find({ userId })
+    .sort({ created_at: 1 })
     .then(campaigns => {
       return res.status(200).json({
         campaigns
@@ -125,19 +129,28 @@ const getUserCampaigns = (req, res) => {
 }
 
 const getPaidCampaigns = (req, res) => {
-  const userId = req.decoded._id
+  const category = req.query.category
+  let filter = {
+    status: 'paid',
+    'campaignDetails.spots': { $gt : 0 },
+  }
+  if (category && category !== 'all') {
+    filter = Object.assign(filter, { 'campaignDetails.campaignCategory': category })
+  }
   return campaignModel
-    .find({
-      status: 'paid',
-      'campaignDetails.spots': { $gt : 0 },
-    })
-    .sort({ updatedAt: -1 })
+    .find(filter)
+    .sort({ 'campaignDetails.submittedDate': -1 })
     .then(campaigns => {
       if (!campaigns) {
         return res.status(404).json({
           message:'Not found'
         })
       }
+      campaigns = campaigns.map((campaign) => {
+        campaign.campaignDetails.tweets = []
+        campaign.campaignDetails.transactions = []
+        return campaign
+      })
       return res.status(200).json({
         campaigns
       })
@@ -151,7 +164,7 @@ const getPaidCampaigns = (req, res) => {
     })
 }
 
-const paymentSuccess = (req, res) => {
+const paymentSuccess = (req, res, next) => {
   const userId = req.decoded._id
   const campaignId = req.params.campaignId
   const body = req.body
@@ -174,9 +187,8 @@ const paymentSuccess = (req, res) => {
 
       return campaign.save().then(() => {
         req.io.emit('request-refresh')
-        return res.status(200).json({
-          message: 'Payment success'
-        })
+        req.product = campaign.campaignDetails
+        return next()
       }).catch(err => {
         return res.status(500).json({
           err: err.message,
@@ -186,6 +198,45 @@ const paymentSuccess = (req, res) => {
     })
     .catch(err => {
       return res.status(500).json({
+        message: 'Server error'
+      })
+    })
+}
+
+const broadcastEmailToAllInfluencers = (req, res) => {
+  return userModel
+    .find({
+      userType: 'influencer'
+    })
+    .then(users => {
+      if (!users) {
+        return res.status(200).json({
+          message: 'Payment successfull'
+        })
+      }
+      const emails = users.map(user => {
+        return {
+          email: user.email,
+          userId: user._id,
+          firstName: user.fullName.split(' ')[0] 
+        }
+      })
+      custom.sendMail(emails, {
+        from: 'Makertap - push@makertap.com',
+        name: 'Makertap',
+        substitutions: {
+          product: req.product.productName,
+          link: process.env.NODE_ENV === 'development' ? `http://localhost:3000/requests`
+            : `https://makertap.com/requests`,
+        }
+      }, 'broadcast')
+      return res.status(200).json({
+        message: 'Payment successfull'
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        err: err.message,
         message: 'Server error'
       })
     })
@@ -258,6 +309,7 @@ module.exports = {
   deleteCampaign,
   getCampaign,
   paymentSuccess,
+  broadcastEmailToAllInfluencers,
   getPaidCampaigns,
   acceptedRequests,
   uploadImage,

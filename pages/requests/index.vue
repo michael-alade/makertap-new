@@ -4,23 +4,22 @@
             <div class="filter">
                 <div uk-grid>
                     <div class="uk-width-1-4@m">
-                        <select class="uk-select" style="height:34px">
-                            <option default>Filter by category</option>
-                            <option>Technology</option>
-                            <option>Fashion</option>
+                        <select v-model="selectedCategory" class="uk-select" style="height:34px">
+                            <option selected="" disabled="" value="default">Filter by category</option>
+                            <option v-for="category in categories" :key="category.name" :value="category.name">{{ category.name }}</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="list-requests">
                 <div class="uk-child-width-expand@s uk-grid-small uk-grid" uk-grid>
-                  <div class="uk-width-1-3@m" v-for="product in campaigns" :key="product._id">
+                  <div class="uk-width-1-3@m uk-grid-margin" v-for="product in campaigns" :key="product._id">
                     <div @click="openLink(product)"><startup-box :product="product" /></div>
                   </div>
                 </div>
             </div>
         </div>
-        <product-modal v-if="this.$auth.state.user.userType === 'influencer'"/>
+        <product-modal v-if="this.$auth.state.user !== null && this.$auth.state.user.userType === 'influencer'"/>
     </section>
 </template>
 
@@ -34,17 +33,63 @@ export default {
     ProductModal
   },
   async asyncData ({ app, redirect }) {
-    if (app.$auth.state.user.userType === 'influencer' && 
-    app.$auth.state.user.twitterDetails === null) {
-      return redirect(302, '/connect/twitter')
+    if (app.$auth.state.user !== null) {
+      if (app.$auth.state.user.userType === 'influencer' && 
+      app.$auth.state.user.twitterDetails === null) {
+        return redirect(302, '/connect/twitter')
+      }
     }
-    const token = app.$auth.token
-    app.$axios.setToken(token, 'Bearer', ['get'])
     const { data } = await  app.$axios.get('/api/campaign/paid/requests')
     return { campaigns: data.campaigns }
   },
   head: {
     title: 'Requests - Makertap'
+  },
+  data () {
+    return {
+      selectedCategory: 'default',
+      categories: [
+        {
+          name: 'All'
+        },
+        {
+          name: 'Creativity',
+        },
+        {
+          name: 'Technology'
+        },
+        {
+          name: 'Sports'
+        },
+        {
+          name: 'Education'
+        },
+        {
+          name: 'Cryptocurrency'
+        },
+        {
+          name: 'Travel'
+        },
+        {
+          name: 'Finance'
+        },
+        {
+          name: 'Fashion'
+        }
+      ]
+    }
+  },
+  watch: {
+    selectedCategory (val) {
+      this.$axios.get('/api/campaign/paid/requests', {
+        params: {
+          'category': val.toLowerCase()
+        }
+      })
+      .then(res => {
+        this.campaigns = res.data.campaigns
+      })
+    }
   },
   methods: {
     openLink(product) {

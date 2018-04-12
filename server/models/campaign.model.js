@@ -58,6 +58,10 @@ var analytics = new Schema({
   }
 })
 
+// var settings = new Schema({
+//   notifications:
+// })
+
 var campaign = new Schema({
   title: {
     type: String
@@ -80,6 +84,7 @@ var campaign = new Schema({
     type: String,
     default: ''
   },
+  // settings: {},
   cleanUrl: {
     type: String,
     default: ''
