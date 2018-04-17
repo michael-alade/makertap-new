@@ -52,7 +52,44 @@ const updatePaymentDetails = (req, res) => {
     })
 }
 
+const requestPayout = (req, res) => {
+  const userId = req.decoded._id
+  const amount = req.body.amount
+  return paymentModel
+    .findOneAndUpdate({
+      user: userId,
+      $inc: {
+        totalAmountAvailable: -amount,
+        totalWithdrawed: amount
+      },
+      $push: {
+        withdrawalTransactions: {
+          status: 'pending',
+          amount: Number(amount),
+          submitDate: Date.now()
+        }
+      }
+    })
+    .then(wallet => {
+      if (!wallet) {
+        throw new Error('Wallet not found')
+      }
+      return res.status(200).json({
+        wallet,
+        message: 'Payout request was successfull',
+        status: 200
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: err.message,
+        status: 500
+      })
+    })
+}
+
 module.exports = {
   getUserWallet,
-  updatePaymentDetails
+  updatePaymentDetails,
+  requestPayout
 }

@@ -6,6 +6,9 @@
                     <a href="#">Wallet</a>
                 </li>
                 <li>
+                    <a href="#">Request payout</a>
+                </li>
+                <li>
                     <a href="#">Settings</a>
                 </li>
             </ul>
@@ -54,6 +57,52 @@
                                             <td>{{ trans.product.productName }}</td>
                                             <td>${{ trans.amount }}</td>
                                             <td>{{ $moment(new Date(trans.date)).format('lll') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="body">
+                        <form @submit.prevent="requestPayout" class="uk-form-stacked">
+                            <div class="uk-grid" uk-grid>
+                                <div class="uk-width-1-2@m uk-width-1-1@s">
+                                    <label for="" class="uk-form-label">Withdrawal amount</label>
+                                    <span v-if="withdrawError.status" class="text-red" style="font-size: 12px">{{ withdrawError.message }}</span>
+                                    <div class="uk-form-controls">
+                                        <input min="4" v-model="withdrawAmount" type="number" class="uk-input" placeholder="How much do you want to withdraw?">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-grid-small" uk-grid>
+                                <div class="uk-width-1-2">
+                                    <button :class="{ 'uk-animation-shake': withdrawError.status }" :disabled="updating || withdrawError.status" type="submit" class="btn">
+                                        {{ updating ? 'Processing' : 'Withdraw' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="uk-card uk-margin mt-card uk-card-default">
+                            <div class="header">
+                                <h4>Withdrawal Transactions</h4>
+                            </div>
+                            <div class="body">
+                                <table class="uk-table uk-table-small uk-table-divider">
+                                    <thead>
+                                        <tr>
+                                            <th>Amount</th>
+                                            <th>Status
+                                            </th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="trans in wallet.withdrawalTransactions" :key="trans.submitDate">
+                                            <td>${{ trans.amount }}</td>
+                                            <td style="text-transform: capitalize;">{{ trans.status }}</td>
+                                            <td>{{ $moment(new Date(trans.submitDate)).format('lll') }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -151,7 +200,12 @@ export default {
   },
   data () {
     return {
-      updating: false
+      updating: false,
+      withdrawAmount: null,
+      withdrawError: {
+        status: false,
+        message: ''
+      }
     }
   },
   asyncData ({ app }) {
@@ -170,6 +224,35 @@ export default {
       this.wallet.currency = 'AUD'
     }
   },
+  watch: {
+    withdrawAmount (val) {
+      if (val.length) {
+        if (Number(val) < 4) {
+          this.withdrawError = {
+            status: true,
+            message: 'Amount should be equal or greater than $4.'
+          }
+          return
+        }
+        if (Number(val) > this.wallet.totalAmountAvailable) {
+          this.withdrawError = {
+            status: true,
+            message: 'Exceeding wallet balance.'
+          }
+          return
+        }
+        this.withdrawError = {
+            status: false,
+            message: ''
+        }
+        return
+      }
+      this.withdrawError = {
+        status: true,
+        message: 'Please provide a valid number.'
+      }
+    }
+  },
   methods: {
     updateSettings () {
       const token = this.$auth.token
@@ -182,6 +265,38 @@ export default {
         })
         .then(res => {
           this.updating = false
+        })
+    },
+    requestPayout () {
+      const amount = this.withdrawAmount
+      const token = this.$auth.token
+      this.$axios.setToken(token, 'Bearer')
+      this.updating = true
+      return this.$axios
+        .post('/api/user/wallet/request-payout', {
+          amount
+        })
+        .then(res => {
+          this.updating = false
+          this.$axios
+            .get('/api/user/wallet')
+            .then(res => {
+              this.wallet = res.data.wallet
+            })
+          return window.UIkit.notification({
+            message: res.data.message,
+            status: 'success',
+            pos: 'bottom-left',
+            timeout: 7000
+          })
+        })
+        .catch(err => {
+          return window.UIkit.notification({
+            message: err.response.data.message,
+            status: 'danger',
+            pos: 'bottom-left',
+            timeout: 9000
+          })
         })
     }
   }

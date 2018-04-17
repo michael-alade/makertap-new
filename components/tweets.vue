@@ -16,7 +16,7 @@
                             <span class="user-name">@{{ tweet.user.screen_name }}</span>
                         </div>
                         <div class="twitter-logo">
-                            <a target="_blank" :href="`https://twitter.com/${tweet.user.screen_name}/status/${tweet.user.id}`"><i class="fa fa-twitter"></i></a>
+                            <a target="_blank" :href="`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`"><i class="fa fa-twitter"></i></a>
                         </div>
                     </div>
                     <div class="tweet-body">

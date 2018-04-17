@@ -4,6 +4,7 @@ const Twitter = require('twitter')
 const dotenv = require('dotenv')
 const userModel = require('../models/user.model')
 const paymentModel = require('../models/payment.model')
+const custom = require('../custom')
 
 dotenv.config()
 
@@ -31,6 +32,20 @@ const signup = (req, res) => {
         return userModel
           .create(body)
           .then(user => {
+            custom.sendMail([body.email], {
+              from: {
+                email: 'no-reply@makertap.com',
+                name: 'Makertap'
+              },
+              name: 'Makertap',
+              subject: 'Email verification - Makertap',
+              substitutions: {
+                name: body.fullName,
+                link: process.env.NODE_ENV === 'development' ? `http://makertap.staging:3000/api/auth/verify-email?i=${body.emailToken}`
+                : `https://makertap.com/api/auth/verify-email?i=${body.emailToken}`,
+                email: body.email,
+              }
+            }, 'emailVerify')
             if (body.userType === 'influencer') {
               const payment = new paymentModel({ user: user._id, email: body.email })
               return payment.save().then(() => {
@@ -49,18 +64,6 @@ const signup = (req, res) => {
             //     time: Date.now()
             //   })
             // }
-            // custom.sendMail([body.email], {
-            //   from: 'no-reply@makertap.com',
-            //   name: 'Makertap',
-            //   subject: 'Email verification - Makertap',
-            //   substitutions: {
-            //     name: body.fullName,
-            //     link: process.env.NODE_ENV === 'development' ? `http://makertap.staging:3000/verify-email?i=${body.emailToken}`
-            //     : `https://makertap.com/verify-email?i=${body.emailToken}`,
-            //     email: body.email,
-            //     username: body.username
-            //   }
-            // }, 'emailVerify')
             return res.status(201).json({
               status: 201,
               message: 'Successfully registered'
@@ -94,22 +97,49 @@ const signup = (req, res) => {
 }
 
 const verifyEmail = (req, res) => {
-  const emailToken = req.query.emailToken
+  const emailToken = req.query.i
+  console.log(emailToken, 'emailToken')
   return userModel
     .findOne({ emailToken: emailToken, verified: false })
     .then(user => {
       if (!user) {
-        return res.status(400).json({
-          message: 'Email has already been verified'
-        })
+        return res.status(200).send(`
+          <html>
+            <head><title>Email already verified</title></head>
+            <body>
+              <p>Email already verified</p><br/>Redirecting...
+              <script>
+                window.setTimeout(function () {
+                  window.location.replace('/login')
+                }, 3000)
+              </script>
+            </body>
+          </html>
+        `)
       }
-      return userModel
-        .update({ verified: true, emailToken: '' })
-        .then(update => {
-          return res.status(200).json({
-            message: 'Email verified'
-          })
-        })
+      user.verified = true
+      user.emailToken = ''
+      return user.save().then(() => {
+        return res.status(200).send(`
+          <html>
+            <head><title>Email verified</title></head>
+            <body>
+              <p>Email verified</p><br/>Redirecting...
+              <script>
+                window.setTimeout(function () {
+                  window.location.replace('/login')
+                }, 3000)
+              </script>
+            </body>
+          </html>
+        `)
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({
+        err: err.response,
+        message: 'Server error: Something went wrong'
+      })
     })
 }
 

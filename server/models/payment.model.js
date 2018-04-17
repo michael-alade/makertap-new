@@ -21,6 +21,10 @@ var payment = new Schema({
     type: Number,
     default: 0
   },
+  withdrawalTransactions: {
+    type: Array,
+    default: []
+  },
   totalWithdrawed: {
     type: Number,
     default: 0

@@ -9,7 +9,7 @@ module.exports = (router) => {
   
   router
     .route('/auth/verify-email')
-    .post(userController.verifyEmail)
+    .get(userController.verifyEmail)
 
   router
     .route('/auth/login')

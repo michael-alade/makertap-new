@@ -222,7 +222,10 @@ const broadcastEmailToAllInfluencers = (req, res) => {
         }
       })
       custom.sendMail(emails, {
-        from: 'Makertap - push@makertap.com',
+        from: {
+          name: 'Makertap',
+          email: 'no-reply@makertap.com'
+        },
         name: 'Makertap',
         substitutions: {
           product: req.product.productName,
