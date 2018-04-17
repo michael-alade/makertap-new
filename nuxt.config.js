@@ -107,7 +107,7 @@ module.exports = {
         return 'http://localhost:3000'
       }
       if (process.env.NODE_ENV === 'production') {
-        return 'https://makertap.com'
+        return { target: 'https://makertap.com' }
       }
       if (process.env.NODE_ENV === 'staging') {
         return 'https://makertap.now.sh'
