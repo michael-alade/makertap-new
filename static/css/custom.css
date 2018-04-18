@@ -1642,16 +1642,17 @@ html {
     background: #A239CA;
 }
 
-.tweets {
+.t {
     position: relative;
     margin-top: 20px;
+    display: block;
 }
 
-.tweets h4 {
+.t h4 {
     margin-bottom: 0;
 }
 
-.tweets .tweets-loading {
+.t .tweets-loading {
     position: absolute;
     top: 0;
     text-align: center;
@@ -1663,7 +1664,7 @@ html {
     background: #fff;
 }
 
-.tweets .tweets-loading span {
+.t .t-loading span {
     display: block;
 }
 

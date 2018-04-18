@@ -1,5 +1,5 @@
 <template>
-    <div class="tweets">
+    <div class="t" style="display: block !important;">
         <h4>Tweets</h4>
         <div class="uk-grid uk-child-width-expand@s uk-margin uk-grid-small" uk-grid>
             <!-- <div class="uk-width-1-2@m">
@@ -29,10 +29,10 @@
                 <div>No tweet yet.</div>
             </div>
         </div>
-        <div v-if="tweetLoading" class="tweets-loading">
+        <!-- <div v-if="tweetLoading" class="tweets-loading">
             <i class="fa fa-2x fa-spinner fa-spin"></i>
             <span>Loading tweets....</span>
-        </div>
+        </div> -->
     </div>
 </template>
 
