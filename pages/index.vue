@@ -206,8 +206,7 @@
 </template>
 
 <script>
-import ProductModal from '~/components/productModal.vue'
-import StartupBox from '~/components/startupBox.vue'
+// import StartupBox from '~/components/startupBox.vue'
 
 export default {
   layout: 'main',
@@ -231,10 +230,10 @@ export default {
       window.UIkit.scroll(el).scrollTo(el)
     }
   },
-  components: {
-    StartupBox,
-    ProductModal
-  }
+//   components: {
+//     StartupBox,
+//     ProductModal
+//   }
 }
 </script>
 

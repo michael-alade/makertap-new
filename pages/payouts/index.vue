@@ -56,7 +56,7 @@
                                         <tr v-for="trans in wallet.transactions" :key="trans.date">
                                             <td>{{ trans.product.productName }}</td>
                                             <td>${{ trans.amount }}</td>
-                                            <td>{{ $moment(new Date(trans.date)).format('lll') }}</td>
+                                            <td>{{ $date(new Date(trans.date), 'Do [of] MMM YYYY hh[:]mm A') }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -102,7 +102,7 @@
                                         <tr v-for="trans in wallet.withdrawalTransactions" :key="trans.submitDate">
                                             <td>${{ trans.amount }}</td>
                                             <td style="text-transform: capitalize;">{{ trans.status }}</td>
-                                            <td>{{ $moment(new Date(trans.submitDate)).format('lll') }}</td>
+                                            <td>{{ $date(new Date(trans.submitDate), 'Do [of] MMM YYYY hh[:]mm A') }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

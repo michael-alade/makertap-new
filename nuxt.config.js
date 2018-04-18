@@ -4,11 +4,11 @@ module.exports = {
   */
 
   head: {
-    title: 'makertap',
+    title: 'Makertap - Promote your product through influential twitter accounts.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Marketplace of adspace' }
+      { hid: 'description', name: 'description', content: '' }
     ],
     link: [
       { rel: 'icon', href: '/favicon.ico' },
@@ -20,19 +20,15 @@ module.exports = {
 
     script: [
       { src: '/js/uikit.min.js' },
-      // { type: 'text/javascript', src: 'https://js.taplytics.com/jssdk/d5a79ba37bd047b38b0dc3befa5732c6.min.js' },
+      { src: '/js/uikit-icons.min.js', async: true }
     ]
   },
-  // serverMiddleware: [
-  //   '~/server/socket',
-  //   { path: '/api', handler: '~/server/api.js' }
-  // ],
   plugins: [
     { src: '~/plugins/firebase', ssr: false },
-    { src: '~/plugins/moment' },
+    { src: '~/plugins/date' },
     { src: '~/plugins/numberAbbreviate' },
     { src: '~/plugins/socketio', ssr: false },
-    { src: '~/plugins/uikit', ssr: false },
+    // { src: '~/plugins/uikit', ssr: false },
   ],
   /*
   ** Customize the progress bar color
@@ -91,7 +87,7 @@ module.exports = {
         return 'http://localhost:3000'
       }
       if (process.env.NODE_ENV === 'production') {
-        return 'http://localhost:3000'
+        return 'https://makertap.com'
       }
       if (process.env.NODE_ENV === 'staging') {
         return 'https://makertap.now.sh'
