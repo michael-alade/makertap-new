@@ -91,6 +91,14 @@ const getCampaignWithShortUrl = (req, res) => {
           message: 'Campaign not found'
         })
       }
+      if (!clicked) {
+        campaign.analytics.impressions.push({
+          type: 'view',
+          time: Date.now(),
+          referer: req.headers.referer,
+          userAgent: req.headers['user-agent']
+        })
+      }
       if (clicked) {
         campaign.analytics.totalClicks++
         campaign.analytics.impressions.push({
