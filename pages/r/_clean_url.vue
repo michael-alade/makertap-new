@@ -30,7 +30,12 @@ export default {
     }
   },
   mounted () {
-    window.location.replace(this.campaignDetails.productWebsite)
+    const shortUrl = this.$route.params.clean_url
+    return this.$axios.get(`/api/campaign/r/${shortUrl}/?clicked=yes`)
+      .then(res => {
+        const campaignDetails = res.data.campaign.campaignDetails
+        window.location.replace(this.campaignDetails.productWebsite)
+      })
   }
 }
 </script>

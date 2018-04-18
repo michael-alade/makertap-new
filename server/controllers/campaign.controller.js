@@ -80,6 +80,7 @@ const getCampaign = (req, res) => {
 
 const getCampaignWithShortUrl = (req, res) => {
   const cleanUrl = req.params.cleanUrl
+  const clicked = req.query.clicked
   return campaignModel
     .findOne({
       cleanUrl
@@ -90,13 +91,15 @@ const getCampaignWithShortUrl = (req, res) => {
           message: 'Campaign not found'
         })
       }
-      campaign.analytics.totalClicks++
-      campaign.analytics.impressions.push({
-        type: 'click',
-        time: Date.now(),
-        referer: req.headers.referer,
-        userAgent: req.headers['user-agent']
-      })
+      if (clicked) {
+        campaign.analytics.totalClicks++
+        campaign.analytics.impressions.push({
+          type: 'click',
+          time: Date.now(),
+          referer: req.headers.referer,
+          userAgent: req.headers['user-agent']
+        })
+      }
       return campaign.save().then(() => {
         return res.status(200).json({
           campaign
