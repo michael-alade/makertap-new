@@ -50,7 +50,7 @@
                         <div class="subtitle">Upload a cool product cover picture</div>
                         <div class="channel-picture-box">
                             <input required type="file" hidden @change="setTempCoverPhoto" ref="uploadCoverPicture">
-                            <div v-if="!loadingCoverPhoto" @click="getCoverPicture" style="width: 472px; height:314px" class="channel-picture uk-cover-container">
+                            <div v-if="!loadingCoverPhoto" @click="getCoverPicture" style="width: 472px; height:314px" class="channel-picture cover-photo uk-cover-container">
                                 <img v-if="!tempCoverPhotoImgUrl" uk-cover src="/img/Placeholder.png"/>
                                 <img v-if="tempCoverPhotoImgUrl" uk-cover :src="tempCoverPhotoImgUrl"/>
                                 <div class="overlay">
@@ -65,7 +65,7 @@
                     <div class="uk-margin">
                         <label class="uk-form-label">Select category</label>
                         <div class="uk-grid-small uk-grid categories" uk-grid>
-                            <div v-for="category in categories" :key="category.name" class="uk-width-1-4@m uk-width-1-2">
+                            <div v-for="category in categories" :key="category.name" class="uk-width-1-4@m uk-width-1-2 uk-grid-margin">
                                 <div @click="selectCategory(category.name)" class="category" :class="{ 'selected': selectedCategory === category.name.toLowerCase() }">
                                     {{ category.name }}
                                 </div>

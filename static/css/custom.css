@@ -696,6 +696,7 @@ html {
 #new-campaign .body .form-box {
     height: 40px;
     width: 585px;
+    max-width: 100%;
 }
 
 #new-campaign .body .form-box .uk-form-label {
@@ -1506,6 +1507,10 @@ html {
     cursor: pointer;
     height: 85px;
     position: relative;
+}
+
+.channel-picture-box .channel-picture.cover-photo {
+    max-width: 100%;
 }
 
 .channel-picture-box .channel-picture:hover > .overlay {

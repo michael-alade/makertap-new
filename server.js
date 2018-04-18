@@ -22,7 +22,7 @@ if (config.dev) {
 }
 
 app.use(bodyParser({ extended: false, limit: '12mb' }))
-app.use(require('express-session')({ secret: 'keyboard cat', key: 'sid', cookie: { secure: false }, resave: true, saveUninitialized: true }));
+// app.use(require('express-session')({ secret: 'keyboard cat', key: 'sid', cookie: { secure: false }, resave: true, saveUninitialized: true }));
 
 app.use((req, res, next) => {
   req.io = io
