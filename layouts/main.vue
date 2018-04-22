@@ -132,6 +132,9 @@
 
 <script>
 export default {
+  mounted () {
+    console.log(this, 'this')
+  }
 //   mounted() {
 //     !(function() {
 //       var t;

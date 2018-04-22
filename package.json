@@ -17,6 +17,7 @@
   "dependencies": {
     "@nuxtjs/auth": "^4.0.0-rc.3",
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/google-analytics": "^2.0.2",
     "@sendgrid/mail": "^6.2.1",
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",

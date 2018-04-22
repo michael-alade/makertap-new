@@ -9,17 +9,17 @@
                     </div>
                     <div class="actions">
                         <div class="views">
-                            <span>3.3k</span>
+                            <span>{{ $abbreviate(analytics.totalClicks, 2) }}</span>
                             <div style="display: flex; align-items:center; justify-content: center">
-                                <span class="eye" uk-tooltip="title: 3.3k views">
+                                <span class="eye" v-bind:uk-tooltip="`title: ${$abbreviate(analytics.totalClicks, 2)} views`">
                                     <i class="fa fa-eye"></i>
                                 </span>
                             </div>
                         </div>
-                        <div class="twitter-share">
-                            <span class="numbers">70</span>
+                        <div class="t-s">
+                            <span class="numbers">{{ product.spots }} spots</span>
                             <div style="display: flex; align-items:center; justify-content: center">
-                                <span uk-toggle="target: #tweet-product" class="twitter" :uk-tooltip="`title: ${product.spots} spots left`">
+                                <span v-bind:uk-toggle="user && user.userType === 'influencer' ? 'target: #tweet-product' : null" class="t-w" v-bind:uk-tooltip="user && user.userType === 'influencer' ? 'title: Share & Earn $5' : 'title: You can\'t share unless you\'re an influencer'">
                                     <i class="fa fa-twitter"></i>
                                 </span>
                             </div>
@@ -51,8 +51,9 @@
                 </div>
             </div>
         </div>
-        <div v-if="user.twitterDetails !== null" id="tweet-product" uk-modal="bg-close: false">
+        <div v-if="user && user.twitterDetails && user.twitterDetails !== null" id="tweet-product" uk-modal="bg-close: false">
             <div class="uk-modal-dialog">
+                <form @submit.prevent="sendTweet">
                 <button class="uk-modal-close-outside" type="button" uk-close uk-toggle="target: #product-modal"></button>
                 <div v-if="user.twitterDetails.profile.followers_count >= 6000" class="uk-modal-header">
                     <h5>Tweet for a cup of coffee ☕</h5>
@@ -67,7 +68,7 @@
                             <img class="twitter-user" :src="user.twitterDetails.profile.profile_image_url"/>
                         </div>
                         <div style="flex: 1; padding-top: 10px">
-                            <textarea placeholder="Write positive review about this product." v-model="tweet" maxlength="140" class="uk-textarea"></textarea>
+                            <textarea required placeholder="Write a positive review about this product." v-model="tweet" maxlength="140" class="uk-textarea"></textarea>
                         </div>
                     </div>
                     <div style="padding: 20px" v-if="user.twitterDetails.profile.followers_count < 6000" class="uk-text-center">
@@ -77,9 +78,31 @@
                 <div v-if="user.twitterDetails.profile.followers_count >= 6000" class="uk-modal-footer uk-text-right">
                     <span style="margin-right: 10px;">{{140 - tweet.length}} left</span>
                     <a href="#product-modal" class="uk-button uk-button-default uk-modal-close" type="button" uk-toggle>Cancel</a>
-                    <button :disabled="sending" style="background:#00aced;" @click="sendTweet" class="uk-button uk-button-primary">
+                    <button :disabled="sending" style="background:#00aced;" type="submit" class="uk-button uk-button-primary">
                         {{ !sending ? 'Tweet' : 'Sending' }}
                     </button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div id="t-s-modal" uk-modal="bg-close: false">
+            <div class="uk-modal-dialog">
+                <button class="uk-modal-close-outside" type="button" uk-close></button>                
+                <div class="uk-modal-body uk-animation-toggle">
+                    <div class="icon uk-animation-shake uk-animation-reverse">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+                        <g>
+                            <path d="M448.869,209.382c0-65.089-52.975-118.033-118.077-118.033c-13.838,0-27.041,2.521-39.393,6.904   c69.695,35.562,117.653,107.867,117.653,191.32c0,2.818-0.317,5.555-0.428,8.342C433.229,276.257,448.869,244.64,448.869,209.382z"/>
+                            <path d="M330.792,40.022c-40.055,0-76.789,13.979-105.778,37.207c16.042,2.327,31.493,6.379,46.187,12.047   c17.985-8.961,38.172-14.137,59.592-14.137c74.033,0,134.291,60.227,134.291,134.242c0,45.913-23.21,86.475-58.455,110.685   c-2.296,16.021-6.316,31.458-11.95,46.134c61.87-25.221,105.521-85.875,105.521-156.818   C500.199,115.829,424.363,40.022,330.792,40.022z"/>
+                            <path d="M194.19,107.184c-100.726,0-182.39,81.634-182.39,182.39c0,100.771,81.664,182.404,182.39,182.404   c100.774,0,182.435-81.634,182.435-182.404C376.625,188.817,294.965,107.184,194.19,107.184z M194.19,433.536   c-79.367,0-143.949-64.582-143.949-143.963c0-79.367,64.582-143.949,143.949-143.949c79.398,0,143.994,64.582,143.994,143.949   C338.185,368.954,273.589,433.536,194.19,433.536z"/>
+                            <path d="M194.19,161.839c-70.423,0-127.735,57.295-127.735,127.734c0,70.438,57.313,127.75,127.735,127.75   c70.454,0,127.785-57.313,127.785-127.75C321.976,219.134,264.645,161.839,194.19,161.839z M203.643,358.397v11.938   c0,6.077-4.942,11.015-11.034,11.015c-6.066,0-10.99-4.924-10.99-10.985v-10.386c-9.562-0.428-18.951-2.217-26.723-4.717   c-6.635-2.156-10.466-9.104-8.725-15.865l0.428-1.662c0.855-3.263,3.024-6.031,6-7.618c2.993-1.583,6.493-1.833,9.676-0.71   c7.473,2.646,16.082,4.479,25.221,4.479c12.774,0,21.548-4.955,21.548-13.948c0-8.535-7.159-13.93-23.827-19.568   c-24.052-8.12-40.469-19.33-40.469-41.147c0-19.794,13.948-35.306,37.995-40.059v-10.337c0-6.098,4.925-11.021,11.004-11.021   c6.097,0,11.021,4.941,11.021,11.021v8.754c8.155,0.379,14.852,1.473,20.472,2.963c6.887,1.834,11.004,8.883,9.245,15.786   l-0.208,0.819c-0.837,3.232-2.944,5.97-5.854,7.601c-2.901,1.632-6.353,2.011-9.531,1.045c-5.387-1.662-12.127-3.007-20.41-3.007   c-14.614,0-19.361,6.317-19.361,12.604c0,7.424,7.882,12.141,27.04,19.33c26.724,9.452,37.537,21.817,37.537,42.1   C243.696,336.817,229.528,353.883,203.643,358.397z"/>
+                        </g>
+                        </svg>
+                    </div>
+                    <div class="uk-text-center">
+                        <h3>You just earned $5</h3>
+                        <span>Check your payouts menu</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,7 +111,6 @@
 
 <script>
 export default {
-  props: ['campaign'],
   data () {
     return {
       tweet: '',
@@ -115,9 +137,7 @@ export default {
         .then(res => {
           this.sending = false
           if (res.status === 200) {
-            return setTimeout(() => {
-              return window.UIkit.modal('#product-modal').show()
-            }, 2000)
+            return window.UIkit.modal('#t-s-modal').show()
           }
         }).catch(err => {
           self.sending = false
@@ -126,15 +146,18 @@ export default {
             show: true,
             message
           }
-          return setTimeout(() => {
-            return window.UIkit.modal('#product-modal').show()
+          return window.setTimeout(() => {
+            window.UIkit.modal('#product-modal').show()
           }, 2000)
         })
     }
   },
   computed: {
-    campaignDetails () {
-      return this.campaign.campaignDetails
+    analytics () {
+      if (this.$store.state.selectedProduct) {
+        return this.$store.state.selectedProduct.analytics
+      }
+      return {}
     },
     product () {
       if (this.$store.state.selectedProduct) {

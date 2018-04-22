@@ -19,6 +19,7 @@
                       <li>
                         <campaign-analytics :campaign="campaign" />
                         <tweets :tweets="campaign.campaignDetails.tweets"/>
+                        <!-- <tweets :tweets="tweets"/> -->
                       </li>
                       <!-- <li>
                         <h5>Notifications</h5>
@@ -43,6 +44,66 @@ export default {
   components: {
     Tweets,
     CampaignAnalytics,
+  },
+  data () {
+    return  {
+      tweets: [
+      {
+        id: '1',
+        user: {
+          name: 'Leo Gill',
+          screen_name: 'leo_gill',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/men/32.jpg',
+        },
+        text: `I just checked out GoFame, they seem to solve the way creators reach audiences`
+      },
+      {
+        id: '2',
+        user: {
+          name: 'Jane Zhu',
+          screen_name: 'jane_zhu',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/women/44.jpg',
+        },
+        text: `GoFame just invented a way for creators to reach larger audiencers.`
+      },
+      {
+        id: '3',
+        user: {
+          name: 'Nicolas Charles',
+          screen_name: 'nicolascharles',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/men/84.jpg',
+        },
+        text: `I just signed up with GoFame to reach more audience for my twitch livestreams`
+      },
+      {
+        id: '4',
+        user: {
+          name: 'Koray Okumuş',
+          screen_name: 'gamerkoray',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/men/42.jpg',
+        },
+        text: `Time to hit that 1 million milestone with GoFame`
+      },
+      {
+        id: '5',
+        user: {
+          name: 'Kate Morrison',
+          screen_name: 'katty_m',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/women/57.jpg',
+        },
+        text: `Using GoFame to reach more viewers for my youtube travel channel`
+      },
+      {
+        id: '6',
+        user: {
+          name: 'Line Rolland',
+          screen_name: 'line_rolland',
+          profile_image_url_https: 'https://randomuser.me/api/portraits/women/79.jpg',
+        },
+        text: `For all the blogger moms, checkout GoFame if you want to reach more people`
+      },
+    ]
+    }
   },
   head () {
     return {

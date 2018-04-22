@@ -115,6 +115,11 @@
                         <form @submit.prevent="updateSettings" class="uk-form-stacked uk-grid-small">
                             <div class="uk-grid-small" uk-grid>
                                 <div class="uk-width-1-2@m uk-width-1-1@s">
+                                    <h5>We currently only support <a href="https://transferwise.com">Transferwise</a> for payouts.</h5>
+                                </div>
+                            </div>
+                            <div class="uk-grid-small" uk-grid>
+                                <div class="uk-width-1-2@m uk-width-1-1@s">
                                     <label class="uk-form-label" for="form-stacked-select">Currency</label>
                                     <div class="uk-form-controls">
                                         <select v-model="wallet.currency" class="uk-select" id="form-stacked-select">
@@ -161,7 +166,7 @@
                             <div class="uk-grid-small uk-margin" uk-grid>
                                 <div class="uk-width-1-2@m uk-width-1-1@s">
                                     <label class="uk-form-label" for="form-stacked-text">Your Email</label>
-                                    <span style="font-size: 12px">You'll receive an email from Transferwise after your first payout</span>
+                                    <span style="font-size: 12px">You'll receive an email from Transferwise about your payout</span>
                                     <input required v-model="wallet.email" type="email" class="uk-input" id="form-stacked-text" placeholder="Enter your email"/>
                                 </div>
                             </div>
@@ -169,6 +174,7 @@
                                 <div class="important-notice">
                                     <div>Important Note <i class="fa fa-info-circle"></i>:</div>
                                     <ul class="important-list">
+                                        <li>All taxes would be handled by influencers based on the tax laws of the country they reside.</li>
                                         <li>Payouts would be made to your local bank account in your selected currency.</li>
                                         <li>Transferwise support a limited number of <a href="https://transferwise.com/help/article/1569835/basic-information/supported-currencies" target="_blank">currencies</a>.</li>
                                         <li>We will send your exact payout amount (USD) to TransferWise. Please note that influencers will absorb any currency conversion and TransferWise fees.</li>

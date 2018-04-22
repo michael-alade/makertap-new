@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <product-modal v-if="this.$auth.state.user !== null && this.$auth.state.user.userType === 'influencer'"/>
+        <product-modal/>
     </section>
 </template>
 
@@ -93,11 +93,8 @@ export default {
   },
   methods: {
     openLink(product) {
-    //   this.$router.push(`/product/${i}`)
-      if (this.$auth.state.user.userType === 'influencer') {
-        this.$store.dispatch('viewProduct', product)
-        window.UIkit.modal('#product-modal').show()
-      }
+      this.$store.dispatch('viewProduct', product)
+      window.UIkit.modal('#product-modal').show()
     }
   },
 }
