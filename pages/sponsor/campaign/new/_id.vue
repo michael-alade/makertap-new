@@ -85,7 +85,7 @@
                         <range-slider
                           class="slider"
                           min="10"
-                          max="1000"
+                          max="200"
                           step="10"
                           v-model="sliderValue">
                         </range-slider>
@@ -110,7 +110,7 @@
                                 style-class="paymentbtn"
                                 :email="email"
                                 :amount="(sliderValue * 5) + 8"
-                                :reference="$route.params.id"
+                                :reference="$route.params.id + '-' + Math.floor(Math.random() * 300)"
                                 :rave-key="raveKey"
                                 :callback="callback"
                                 :close="close"
@@ -224,9 +224,6 @@ export default {
       this.form.spots = val
       this.form.campaignPrice = val * 5
     }
-  },
-  mounted () {
-    console.log(process.env.RAVEPAY_PUBLIC_KEY, 'key')
   },
   methods: {
     checkForm (form) {

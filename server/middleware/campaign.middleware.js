@@ -3,24 +3,19 @@ const campaignModel = require('../models/campaign.model')
 const dotenv = require('dotenv')
 dotenv.config()
 
-var payload = {
-  "SECKEY": "FLWSECK-e6db11d1f8a6208de8cb2f94e293450e-X", //use the secret key from the paybutton generated on the rave dashboard
-};
-
-
 const paymentVerify = (req, res, next) => {
   const body = Object.assign({}, req.body)
   const transaction = Object.assign({}, body.transactions[0])
-  const flwRef = transaction.tx.flwRef
+  const txref = transaction.tx.txRef
   const payload = {
     "SECKEY": process.env.RAVEPAY_SECRET,
-    "flw_ref": flwRef
+    "txref": txref
   }
   return axios.post(process.env.RAVEPAY_URL, payload)
   .then(response => {
-    if (response.data.status === 'success') {
+    if (response.data.data.chargecode === '00') {
       if (response.data.data.amount === (body.campaignPrice + 8)) {
-        if (response.data.data.tx_ref === req.params.campaignId) {
+        if (response.data.data.txref === txref) {
           return next()
         }
         return res.status(400).json({
