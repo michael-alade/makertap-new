@@ -23,7 +23,7 @@ export default {
       meta: [
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: `${this.campaignDetails.productName}` },
-        { name: 'twitter:description', content: `${this.campaignDetails.productTagline}` },
+        { name: 'twitter:description', content: `${this.campaignDetails.productTagline}: ${this.campaignDetails.productDescription}` },
         { name: 'twitter:image:src', content: this.campaignDetails.productCoverPhoto },
         { name: 'twitter:site', content: '@makertap' }
       ]

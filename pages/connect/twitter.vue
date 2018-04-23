@@ -14,6 +14,7 @@ export default {
       return redirect(302, '/')
     }
   },
+  middleware: ['auth'],
   components: {
     connectTwitter
   },

@@ -17,7 +17,6 @@ module.exports = {
       { rel: 'stylesheet', type: 'text/css', media: 'screen', href: 'https://fonts.googleapis.com/css?family=Open+Sans|Lato|Roboto|Encode+Sans|Montserrat|Rubik:300,400' },
       { rel: 'stylesheet', type: 'text/css', media: 'screen', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
     ],
-
     script: [
       { src: '/js/uikit.min.js' },
       { src: '/js/uikit-icons.min.js', async: true }
@@ -95,7 +94,8 @@ module.exports = {
       if (process.env.NODE_ENV === 'staging') {
         return 'https://makertap.now.sh'
       }
-    })()
+    })(),
+    RAVEPAY_PUBLIC_KEY: process.env.RAVEPAY_PUBLIC_KEY
   },
   axios: {
     proxy: true,

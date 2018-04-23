@@ -105,7 +105,7 @@
                                 type="submit"
                                 :form="form"
                                 :checkForm="checkForm"
-                                :is-production="false"
+                                :is-production="isProd"
                                 :text="`$${sliderValue * 5} ${raveBtnText}`"
                                 style-class="paymentbtn"
                                 :email="email"
@@ -133,6 +133,7 @@ export default {
     VueRavePay,
     RangeSlider
   },
+  middleware: ['auth'],
   head () {
     return {
       title: `Edit | ${this.campaign.title}`
@@ -140,7 +141,7 @@ export default {
   },
   asyncData ({ app, params, redirect }) {
     if (!app.$auth.hasScope('sponsor')) {
-      return redirect(302, '/publisher/dashboard/requests')
+      return redirect(302, '/requests')
     }
     const token = app.$auth.token
     app.$axios.setToken(token, 'Bearer', ['get'])
@@ -158,6 +159,7 @@ export default {
   },
   data () {
     return {
+      isProd: process.env.NODE_ENV === 'production' ? true : false,
       allowPay: false,
       tempCoverPhotoImgUrl: null,
       loadingCoverPhoto: null,
@@ -166,8 +168,8 @@ export default {
       sliderValue: 20,
       selectedCategory: '',
       raveBtnText: "Publish",
-      raveKey: "FLWPUBK-e6b3ce4d58052879aac69887be9d4ef0-X",
-      email: "foobar@example.com",
+      raveKey: process.env.RAVEPAY_PUBLIC_KEY,
+      email: this.$auth.state.user.email,
       amount: 10000,
       paymentDisabled: true,
       selectedPricing: {
