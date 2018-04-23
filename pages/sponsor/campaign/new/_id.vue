@@ -225,6 +225,9 @@ export default {
       this.form.campaignPrice = val * 5
     }
   },
+  mounted () {
+    console.log(process.env.RAVEPAY_PUBLIC_KEY, 'key')
+  },
   methods: {
     checkForm (form) {
       let errors = []

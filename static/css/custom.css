@@ -1034,6 +1034,10 @@ html {
     font-size: 14px;
 }
 
+.range-slider {
+    width: 100% !important;
+}
+
 .requests-box .request-price-details hr {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -1938,7 +1942,7 @@ footer .footer-link.home {
 }
 
 .uk-notification.uk-notification-bottom-left {
-    z-index: 14000;
+    z-index: 50000;
 }
 
 #t-s-modal .uk-modal-dialog {
