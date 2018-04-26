@@ -9,7 +9,9 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
+      { name: 'keywords', content: 'Makertap,promote,marketing,promote my business, micro-influencer, influencer, influencer makerting, twitter influencer' },
+      { name: 'author', content: 'Kolawole Alade' }
     ],
     link: [
       { rel: 'icon', href: '/favicon.ico' },
